@@ -1,15 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Sono:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Acme&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans:wght@700&display=swap');
 body{
     margin: 0;
-    margin-top: 80px;
+    margin-top: 55px;
     background-color: white;
 }
 .navbar{
     background-color: #534292;
     width: 100%;
-    height: 5em;
+    height: 3.5em;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -23,7 +24,7 @@ body{
     text-decoration: none;
     font-family: 'Sono', sans-serif;
     font-weight: 700;
-    font-size:40px;
+    font-size:35px;
 }
 .navbar > .title > a{
     text-decoration: none;
@@ -34,7 +35,7 @@ body{
     text-decoration: none;
     font-family: 'Ubuntu', sans-serif;
     color:white;
-    font-size:x-large;
+    font-size:larger;
 }
 
 .messages{
@@ -52,14 +53,14 @@ body{
 }
 
 .centereddiv{
-    margin-top: 2%;
+    margin-top: 10%;
     width: 40%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     background-color:white ;
     color:#534292;
-    border: none;
+    border: 2px solid #534292;
     margin-left: 30%;
     box-shadow: 2px 2px 7px white;
     border-radius: 20px;
@@ -142,30 +143,30 @@ a{
 
 .heading {
     color: #534292;
-    font-size: xx-large;
-    font-family: 'Acme', sans-serif;
+    font-size: x-large;
+    font-family: 'PT Sans', sans-serif;
 }
 
 .createbutton {
-    font-size: larger;
+    font-size: large;
     font-family: 'Ubuntu', sans-serif;
     color: white;
     background-color: #534292;
     margin-top: auto;
     margin-bottom: auto;
     border: none;
-    border-radius: 12px;
-    height: 50px;
-    width: 300px;
+    border-radius: 8px;
+    height: 40px;
+    width: 180px;
 }
 
 .class {
     display: flex;
     flex-direction: column;
     padding: 0px 30px 20px;
-    background-color: #74BDE0;
+    background-color: white;
     height: 45%;
-    border-top: 3px solid #534292;
+    border-top: 2px solid black;
 }
 
 .classes {
@@ -182,10 +183,10 @@ a{
 .card {
     display: flex;
     flex-direction: column;
-    background-color: #fef7eb;
-    border: 5px solid #534292;
-    height: 280px;
-    width: 320px;
+    background-color: #534292;
+    border: 2px solid black;
+    height: 210px;
+    width: 265px;
     margin-right: 20px;
     border-radius: 12px;
     justify-content: space-between;
@@ -194,16 +195,21 @@ a{
 .card-header {
     border-bottom: 1px solid black;
     padding: 20px 20px;
+    background-color: white;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
 }
 
 .card-name {
-    font-family: 'Sono', sans-serif;
+    font-family: 'Segoe UI', sans-serif;
     margin: 0 0 10px 0;
 }
 
 .card-info {
-    font-family: 'Ubuntu', sans-serif;
-    font-weight: 400;
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: 600;
+    font-size: large;
     margin: 0;
     color: grey;
 }
@@ -213,6 +219,7 @@ a{
     height: 50px;
     padding-left: 20px;
     align-items: center;
+    /* background-color: white; */
 }
 
 .card-tail > h4 {
@@ -220,8 +227,70 @@ a{
     padding-left: 10px;
     height: 10px;
     margin-top: 18px;
+    font-weight: 400;
+    color: white;
 }
 .card-tail > img {
+    display: flex;
+    align-items: center;
     height: 60%;
     width: auto;
+}
+
+
+.container {
+    display: inline-block;
+    cursor: pointer;
+    padding-top: 15px;
+}
+.bar1, .bar2, .bar3 {
+  width: 20px;
+  height: 3px;
+  background-color: #333;
+  margin: 3px 2px;
+  transition: 0.4s;
+}
+
+/* Rotate first bar */
+.change .bar1 {
+  transform: translate(0, 6px) rotate(-45deg);
+}
+
+/* Fade out the second bar */
+.change .bar2 {opacity: 0;}
+
+/* Rotate last bar */
+.change .bar3 {
+  transform: translate(0, -6px) rotate(45deg);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 8px 8px 16px 8px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 12px;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+  border-radius: 12px;
+
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.change:hover .dropdown-content {
+  display: block;
+  transition: 0.4s;
+
 }
