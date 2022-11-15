@@ -1,22 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Radio+Canada&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Water+Brush&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Acme&display=swap');
 body{
     margin: 0;
-    background-color:#534292;
+    margin-top: 80px;
+    background-color: white;
 }
 .navbar{
     background-color: #534292;
     width: 100%;
-    height: 9%;
+    height: 5em;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
 }
 .navbar > .title{
     margin-left: 30px;
     text-decoration: none;
-    font-family: 'Water Brush', cursive;
+    font-family: 'Sono', sans-serif;
+    font-weight: 700;
     font-size:40px;
 }
 .navbar > .title > a{
@@ -26,15 +32,15 @@ body{
 .navbar > .buttons > span > a{
     margin-right: 30px;
     text-decoration: none;
-    font-family: 'Radio Canada', sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     color:white;
-    font-size:larger;
+    font-size:x-large;
 }
 
 .messages{
     background-color:#4a924b;
     height:50px;
-    font-family: 'Radio Canada', sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     color:white;
     font-size: medium;
     display: flex;
@@ -118,4 +124,104 @@ a{
     height: 40px;
     background-color: #534292;
     color:white;
+}
+
+.home {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin: 0;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 20px 0px 30px;
+    height: 10%;
+}
+
+.heading {
+    color: #534292;
+    font-size: xx-large;
+    font-family: 'Acme', sans-serif;
+}
+
+.createbutton {
+    font-size: larger;
+    font-family: 'Ubuntu', sans-serif;
+    color: white;
+    background-color: #534292;
+    margin-top: auto;
+    margin-bottom: auto;
+    border: none;
+    border-radius: 12px;
+    height: 50px;
+    width: 300px;
+}
+
+.class {
+    display: flex;
+    flex-direction: column;
+    padding: 0px 30px 20px;
+    background-color: #74BDE0;
+    height: 45%;
+    border-top: 3px solid #534292;
+}
+
+.classes {
+    display: grid;
+    grid-auto-flow: column;
+    overflow: scroll;
+    justify-content: flex-start;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    background-color: #fef7eb;
+    border: 5px solid #534292;
+    height: 280px;
+    width: 320px;
+    margin-right: 20px;
+    border-radius: 12px;
+    justify-content: space-between;
+}
+
+.card-header {
+    border-bottom: 1px solid black;
+    padding: 20px 20px;
+}
+
+.card-name {
+    font-family: 'Sono', sans-serif;
+    margin: 0 0 10px 0;
+}
+
+.card-info {
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
+    margin: 0;
+    color: grey;
+}
+
+.card-tail{
+    display: flex;
+    height: 50px;
+    padding-left: 20px;
+    align-items: center;
+}
+
+.card-tail > h4 {
+    font-family: 'Ubuntu', sans-serif;
+    padding-left: 10px;
+    height: 10px;
+    margin-top: 18px;
+}
+.card-tail > img {
+    height: 60%;
+    width: auto;
 }

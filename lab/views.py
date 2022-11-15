@@ -4,4 +4,4 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='/accounts/login')
 def home(request):
-    return HttpResponse("<h1>Hi</h1>")
+    return render(request, 'lab/home.html')

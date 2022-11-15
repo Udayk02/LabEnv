@@ -13,9 +13,9 @@
     <div class="navbar">
       <div class="title">
         {% if user.is_authenticated %} 
-        <a href="{% url 'loggedin' %}">Navbar</a>
+        <a href="{% url 'home' %}">LabEnv</a>
         {% else %}
-        <a href="{% url 'account_login' %}">Navbar</a>
+        <a href="{% url 'account_login' %}">LabEnv</a>
         {% endif %}
       </div>
       <div class="buttons">
