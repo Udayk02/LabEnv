@@ -1,0 +1,8 @@
+{% extends "account/base.html" %}
+{% block content %}
+{% if user.is_authenticated %}
+    <div style="display: flex; justify-content: center; padding-top: 15%;">
+        <span style="color:white;font-size:100px;">Hello , {{user.username}}</span>
+    </div>
+{% endif %}
+{% endblock %}

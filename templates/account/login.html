@@ -1,0 +1,74 @@
+<!-- inherits/extends the base template -->
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+
+{% block content %}
+
+
+<div class="centereddiv">
+  
+  <h1>{% trans "Sign In" %}</h1>
+
+  
+{% get_providers as socialaccount_providers %}
+
+{% if socialaccount_providers %}
+
+<p>Please sign in with one
+of your existing google account. or, <a href="{{ signup_url }}">sign up</a></p>
+
+<div class="socialaccount_ballot">
+  <ul class="socialaccount_providers">
+    <a href='{% provider_login_url "google" process="login"%}'><img class="google" src="https://img.icons8.com/fluency/48/000000/google-logo.png"/>  </a>
+  </ul>
+  <div class="login-or">{% trans 'or' %}</div>  
+</div>
+
+{% include "socialaccount/snippets/login_extra.html" %}
+
+{% else %}
+<p>{% blocktrans %}If you have not created an account yet, then please
+  <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+{% endif %}
+  
+
+<form class="loginform" method="POST" action="{% url 'account_login' %}">
+  <!-- checks and displays error messages when made an invalid request -->
+  {% if form.errors %}
+    <div class="alert alert-error">
+      <h4>Please fix the following errors</h4>
+      <ul>
+        {% for field in form %}
+          {% if field.errors %}
+            {% for error in field.errors %}
+              <li><a href="#id_{{ field.name }}" class="error">{{ error|escape }}</a></li>
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      </ul>
+      {% if form.non_field_errors %}
+        {{ form.non_field_errors }}
+      {% endif %}
+    </div>
+  {% endif %}
+    {% csrf_token %}
+    <!-- shows the form fields -->
+    <label >{{form.login.label}}</label>
+    {{form.login}}
+    <label >{{form.password.label}}</label>
+    {{form.password}}
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+    {% endif %}
+    <a class="button secondaryAction" style="margin-top: 10px;font-size: 18px;" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+    <button class="primaryAction" type="submit">{% trans "Sign In" %}</button>
+</form>
+  
+</div>
+{% endblock %}
+  
