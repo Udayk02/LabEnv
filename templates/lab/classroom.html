@@ -1,0 +1,44 @@
+{% extends "account/base.html" %}
+{% block content %}
+    <div class='top' style="border-bottom: 2px solid black ;">
+        <h1 class='heading' style="font-size: 26px ;border-bottom: 2px solid black;"> {{classroom.subject}} </h1>
+        <a href="{% url 'create_assignment' pk=classroom.id %}">
+            <button class='createbutton'>Post a Question</button>
+        </a>
+    </div>
+    <div class="questions">
+        <div class="allquestions">
+            <h2 class="questions_heading">All Questions</h2>
+            <div class="question-list">
+                {% for assignment in assignments %}
+                    <div class="question">
+                        <div class="question-header">
+                            <p class="tag">Due date : 11/10/2022</p>
+                            <div style="display: flex;margin:0px;">
+                                <p class="tag"> . {{assignment.status}} </p>
+                                <p class="tag"> . {{assignment.type}} </p>
+                            </div>
+                        </div>
+                        <p class="question-name">{{assignment.question}}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="ongoingquestions">
+            <h2 class="questions_heading">Ongoing Questions</h2>
+            <div class="ongoing-questions-list">
+                <div class="ongoing-question">
+                    <div class="question-header">
+                        <p class="tag">Due date : 11/10/2022</p>
+                        <div style="display: flex;margin:0px;">
+                            <p class="tag"> . Assignment </p>
+                        </div>
+                    </div>
+                    <p class="question-name">Submit your email to get the Django cheat sheet. If you are in sdkjfhaskdfhkjsbfkjasdbfkasbfkasjsdk</p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

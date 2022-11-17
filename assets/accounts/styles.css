@@ -86,7 +86,7 @@ body{
 }
 .loginform > label{
     margin-bottom: 10px;
-    margin-top: 10px;
+    margin-top: 5px;
     font-size: 20px;
 }
 
@@ -138,7 +138,7 @@ a{
     display: flex;
     justify-content: space-between;
     padding: 0px 20px 0px 30px;
-    height: 10%;
+    height: 70px;
 }
 
 .heading {
@@ -152,12 +152,13 @@ a{
     font-family: 'Ubuntu', sans-serif;
     color: white;
     background-color: #534292;
-    margin-top: auto;
-    margin-bottom: auto;
+    margin-top: 14.740px;
+    margin-bottom: 14.740px;
     border: none;
     border-radius: 8px;
     height: 40px;
     width: 180px;
+    cursor:pointer;
 }
 
 .class {
@@ -293,4 +294,84 @@ a{
   display: block;
   transition: 0.4s;
 
+}
+
+.questions{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40em;
+}
+.allquestions{
+    height: 35em;
+    width: 68em;
+    margin:15px;
+    border-radius: 10px;
+    box-shadow: 8px 8px 8px 8px rgba(0,0,0,0.2);
+    border: 2px solid black;
+    overflow: scroll;
+}
+.ongoingquestions{
+    height: 35em;
+    width: 20em;
+    margin:20px;
+    border-radius: 10px;
+    border: 2px solid black;
+    box-shadow: 8px 8px 8px 8px rgba(0,0,0,0.2);
+    overflow: scroll;
+}
+.questions_heading{
+    font-family: 'Ubuntu', sans-serif;
+    color:#534292;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin-top: 0px;
+    border-bottom: 1.5px solid black;
+}
+.question-list{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.ongoing-questions-list{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.question{
+    width: 65em;
+    height: 7em;
+    box-shadow: 4px 4px 8px 4px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 2px solid rgba(0,0,0,0.2);
+}
+.ongoing-question{
+    width: 18em;
+    height: 7em;
+    box-shadow: 4px 4px 8px 4px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 2px solid rgba(0,0,0,0.2);
+}
+.question-header{
+    display: flex;
+    margin-top: 0px;
+    padding: 3px;
+    border-bottom: 1px solid black;
+    justify-content: space-between;
+}
+
+.question-name{
+    font-family: 'Ubuntu', sans-serif;
+    margin:8px;
+}
+.tag{
+    margin: 4px;
+    font-family: 'Ubuntu', sans-serif;
+    color: #0e0d0d;
 }
