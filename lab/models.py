@@ -27,6 +27,9 @@ class Assignment(models.Model):
     status = models.IntegerField(default=1,blank=True)
     question = models.TextField(max_length=500)
 
+    class Meta:
+        ordering = ['-updated', '-created']
+
 class Answer(models.Model):
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
     student = models.ForeignKey(User, on_delete=models.CASCADE)

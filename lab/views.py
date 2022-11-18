@@ -22,7 +22,8 @@ def home(request):
 def classroom(request,pk):
     classroom = ClassRoom.objects.get(id=pk)
     assignments = classroom.assignment_set.all()
-    return render(request, 'lab/classroom.html',{'assignments':assignments,'classroom':classroom})
+    students = classroom.students.all()
+    return render(request, 'lab/classroom.html',{'assignments':assignments,'classroom':classroom,'students':students})
 
 @login_required(login_url='/accounts/login')
 def create_class(request):
@@ -55,3 +56,7 @@ def create_assignment(request,pk):
             return redirect('classroom',pk=pk)
     return render(request, 'lab/create_assignment.html',{"form":form,"classroom":classroom})
 
+@login_required(login_url='/accounts/login')
+def question(request,pk):
+    assignment = Assignment.objects.get(id=pk)
+    return render(request, 'lab/question.html',{'assignment':assignment})

@@ -191,6 +191,8 @@ a{
     margin-right: 20px;
     border-radius: 12px;
     justify-content: space-between;
+    box-shadow: 8px 8px 8px 4px rgba(0,0,0,0.2);
+
 }
 
 .card-header {
@@ -220,7 +222,6 @@ a{
     height: 50px;
     padding-left: 20px;
     align-items: center;
-    /* background-color: white; */
 }
 
 .card-tail > h4 {
@@ -372,6 +373,114 @@ a{
 }
 .tag{
     margin: 4px;
+    display: flex;
+    align-items: center;
     font-family: 'Ubuntu', sans-serif;
     color: #0e0d0d;
+}
+.participants{
+    font-size: large;
+    font-weight: 400;
+    font-family: 'Ubuntu', sans-serif;
+    color: black;
+    background-color: white;
+    margin-top: 14.740px;
+    margin-bottom: 14.740px;
+    border: 2px solid black;
+    border-radius: 8px;
+    height: 40px;
+    width: auto;
+    cursor:pointer;
+    display: flex;
+    align-items: center;
+}
+
+.participants > img {
+    display: flex;
+    align-items: center;
+    height: 64%;
+    width: auto;
+    margin-right: 10px;
+}
+
+#menu    
+{   
+    height: 77%; 
+    width: 200px;
+    position: absolute; 
+    z-index: 1; 
+    top: 135;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    left: 0;
+    color: white;
+    background-color: #534292; 
+    border: 2px solid black;
+    overflow-x: hidden; 
+    padding-top: 10px; 
+    transition: 0.5s;
+}  
+.menuOff     
+{    
+    display: none;    
+}    
+.menuOn    
+{    
+    display: block;    
+}  
+
+#menu > div > h3{
+    margin:10px;
+    background-color: white;
+    color:black;
+    width:max-content;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    padding: 10px;
+    padding-left: 60px;
+    padding-right: 60px;
+    font-family: 'Ubuntu', sans-serif;
+    border-radius: 10px;
+}
+
+.students_list{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.students_list > p{
+    display: flex;
+    /* justify-content: center; */
+    border-bottom: 1px solid white;
+    /* border-right: 1px solid white; */
+    margin:7px;
+}
+
+.dot {
+    height: 7px;
+    width: 7px;
+    background-color: rgb(61, 216, 72);
+    border:1px solid black;
+    margin-right: 6px;
+    margin-left: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+.type-dot {
+    /* color:sandybrown */
+    display: none;
+    height: 7px;
+    width: 7px;
+    background-color: rgb(61, 216, 72);
+    border:1px solid black;
+    margin-right: 6px;
+    margin-left: 10px;
+    border-radius: 50%;
+    display: inline-block;
 }
