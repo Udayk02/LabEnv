@@ -5,225 +5,73 @@
 <div class='home'>
     <div class='top'>
         <h1 class='heading' style="font-size: 22px ;border-bottom: 2px solid black;"> >Hello, {{user.username}} </h1>
-        <button class='createbutton'>Create Classroom</button>
+        <a href="{% url 'create_class' %}">
+            <button class='createbutton'>Create Classroom</button>
+        </a>
     </div>
     <div class='class'>
         <h1 class='heading' style="font-size: 28px ;">My Classes</h1>
         <div class='classes'>
-            <div class='card'> 
-                <div class='card-header'>
-                    <div>
-                        <h1 class='card-name'>Python</h1>
-                        <h2 class='card-info'>CSE - 2</h3>
-                        <h3 class='card-info'>Sanoop Kumar</h2>
-                    </div>
-                    <div class="container" onclick="myFunction(this)">
-                        <div class="bar1"></div>
-                        <div class="bar2"></div>
-                        <div class="bar3"></div>
-                        <div class="dropdown-content">
-                            <a href="#">Link 1</a>
-                            <a href="#">Link 2</a>
-                            <a href="#">Link 3</a>
+            {% for classroom in classes %}
+                <div class='card'> 
+                    <div class='card-header'>
+                        <div>
+                            <a href="{% url 'classroom' pk=classroom.id %}" style="text-decoration: none;color: black;">
+                                <h1 class='card-name'>{{classroom.subject}}</h1>
+                            </a>
+                            <h2 class='card-info'>{{classroom.classname}}</h3>
+                            <h3 class='card-info'>{{classroom.host}}</h2>
+                        </div>
+                        <div class="container" onclick="myFunction(this)">
+                            <div class="bar1"></div>
+                            <div class="bar2"></div>
+                            <div class="bar3"></div>
+                            <div class="dropdown-content">
+                                <a href="#">Link 1</a>
+                                <a href="#">Link 2</a>
+                                <a href="#">Link 3</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class='card-tail'>
-                    <img src="{% static 'images/people.png' %}" alt="">
-                    <h4>60 participants</h4>
-                </div>
-            </div>
-            <div class='card'> 
-                <div class='card-header'>
-                    <div>
-                        <h1 class='card-name'>Python</h1>
-                        <h2 class='card-info'>CSE - 2</h3>
-                        <h3 class='card-info'>Sanoop Kumar</h2>
-                    </div>
-                    <div class="container" onclick="myFunction(this)">
-                        <div class="bar1"></div>
-                        <div class="bar2"></div>
-                        <div class="bar3"></div>
-                        <div class="dropdown-content">
-                            <a href="#">Link 1</a>
-                            <a href="#">Link 2</a>
-                            <a href="#">Link 3</a>
-                        </div>
+                    <div class='card-tail'>
+                        <img src="{% static 'images/people.png' %}" alt="">
+                        <h4>{{ classroom.students.count }} Students</h4>
                     </div>
                 </div>
-                <div class='card-tail'>
-                    <img src="{% static 'images/people.png' %}" alt="">
-                    <h4>60 participants</h4>
-                </div>
-            </div>
-            <div class='card'> 
-                <div class='card-header'>
-                    <div>
-                        <h1 class='card-name'>Python</h1>
-                        <h2 class='card-info'>CSE - 2</h3>
-                        <h3 class='card-info'>Sanoop Kumar</h2>
-                    </div>
-                    <div class="container" onclick="myFunction(this)">
-                        <div class="bar1"></div>
-                        <div class="bar2"></div>
-                        <div class="bar3"></div>
-                        <div class="dropdown-content">
-                            <a href="#">Link 1</a>
-                            <a href="#">Link 2</a>
-                            <a href="#">Link 3</a>
-                        </div>
-                    </div>
-                </div>
-                <div class='card-tail'>
-                    <img src="{% static 'images/people.png' %}" alt="">
-                    <h4>60 participants</h4>
-                </div>
-            </div>
-            <div class='card'> 
-                <div class='card-header'>
-                    <div>
-                        <h1 class='card-name'>Python</h1>
-                        <h2 class='card-info'>CSE - 2</h3>
-                        <h3 class='card-info'>Sanoop Kumar</h2>
-                    </div>
-                    <div class="container" onclick="myFunction(this)">
-                        <div class="bar1"></div>
-                        <div class="bar2"></div>
-                        <div class="bar3"></div>
-                        <div class="dropdown-content">
-                            <a href="#">Link 1</a>
-                            <a href="#">Link 2</a>
-                            <a href="#">Link 3</a>
-                        </div>
-                    </div>
-                </div>
-                <div class='card-tail'>
-                    <img src="{% static 'images/people.png' %}" alt="">
-                    <h4>60 participants</h4>
-                </div>
-            </div>
-            <div class='card'> 
-                <div class='card-header'>
-                    <div>
-                        <h1 class='card-name'>Python</h1>
-                        <h2 class='card-info'>CSE - 2</h3>
-                        <h3 class='card-info'>Sanoop Kumar</h2>
-                    </div>
-                    <div class="container" onclick="myFunction(this)">
-                        <div class="bar1"></div>
-                        <div class="bar2"></div>
-                        <div class="bar3"></div>
-                        <div class="dropdown-content">
-                            <a href="#">Link 1</a>
-                            <a href="#">Link 2</a>
-                            <a href="#">Link 3</a>
-                        </div>
-                    </div>
-                </div>
-                <div class='card-tail'>
-                    <img src="{% static 'images/people.png' %}" alt="">
-                    <h4>60 participants</h4>
-                </div>
-            </div>
-            <div class='card'> 
-                <div class='card-header'>
-                    <div>
-                        <h1 class='card-name'>Python</h1>
-                        <h2 class='card-info'>CSE - 2</h3>
-                        <h3 class='card-info'>Sanoop Kumar</h2>
-                    </div>
-                    <div class="container" onclick="myFunction(this)">
-                        <div class="bar1"></div>
-                        <div class="bar2"></div>
-                        <div class="bar3"></div>
-                        <div class="dropdown-content">
-                            <a href="#">Link 1</a>
-                            <a href="#">Link 2</a>
-                            <a href="#">Link 3</a>
-                        </div>
-                    </div>
-                </div>
-                <div class='card-tail'>
-                    <img src="{% static 'images/people.png' %}" alt="">
-                    <h4>60 participants</h4>
-                </div>
-            </div>
-            <div class='card'> 
-                <div class='card-header'>
-                    <div>
-                        <h1 class='card-name'>Python</h1>
-                        <h2 class='card-info'>CSE - 2</h3>
-                        <h3 class='card-info'>Sanoop Kumar</h2>
-                    </div>
-                    <div class="container" onclick="myFunction(this)">
-                        <div class="bar1"></div>
-                        <div class="bar2"></div>
-                        <div class="bar3"></div>
-                        <div class="dropdown-content">
-                            <a href="#">Link 1</a>
-                            <a href="#">Link 2</a>
-                            <a href="#">Link 3</a>
-                        </div>
-                    </div>
-                </div>
-                <div class='card-tail'>
-                    <img src="{% static 'images/people.png' %}" alt="">
-                    <h4>60 participants</h4>
-                </div>
-            </div>
-            <div class='card'> 
-                <div class='card-header'>
-                    <div>
-                        <h1 class='card-name'>Python</h1>
-                        <h2 class='card-info'>CSE - 2</h3>
-                        <h3 class='card-info'>Sanoop Kumar</h2>
-                    </div>
-                    <div class="container" onclick="myFunction(this)">
-                        <div class="bar1"></div>
-                        <div class="bar2"></div>
-                        <div class="bar3"></div>
-                        <div class="dropdown-content">
-                            <a href="#">Link 1</a>
-                            <a href="#">Link 2</a>
-                            <a href="#">Link 3</a>
-                        </div>
-                    </div>
-                </div>
-                <div class='card-tail'>
-                    <img src="{% static 'images/people.png' %}" alt="">
-                    <h4>60 participants</h4>
-                </div>
-            </div>
+            {% endfor %}
                         
         </div>
     </div>
     <div class='class'>
         <h1 class='heading' style="font-size: 28px ;">Classes you are in</h1>
         <div class='classes'>
-            <div class='card'> 
-                <div class='card-header'>
-                    <div>
-                        <h1 class='card-name'>Python</h1>
-                        <h2 class='card-info'>CSE - 2</h3>
-                        <h3 class='card-info'>Sanoop Kumar</h2>
-                    </div>
-                    <div class="container" onclick="myFunction(this)">
-                        <div class="bar1"></div>
-                        <div class="bar2"></div>
-                        <div class="bar3"></div>
-                        <div class="dropdown-content">
-                            <a href="#">Share</a>
-                            <a href="#">Edit</a>
-                            <a href="#">Delete</a>
+            {% for classroom in classes_you_are_in %}
+                <div class='card'> 
+                    <div class='card-header'>
+                        <div>
+                            <a href="{% url 'classroom' pk=classroom.id %}" style="text-decoration: none;color: black;">
+                                <h1 class='card-name'>{{classroom.subject}}</h1>
+                            </a>
+                            <h2 class='card-info'>{{classroom.classname}}</h3>
+                            <h3 class='card-info'>{{classroom.host}}</h2>
+                        </div>
+                        <div class="container" onclick="myFunction(this)">
+                            <div class="bar1"></div>
+                            <div class="bar2"></div>
+                            <div class="bar3"></div>
+                            <div class="dropdown-content">
+                                <a href="#">Link 1</a>
+                                <a href="#">Link 2</a>
+                                <a href="#">Link 3</a>
+                            </div>
                         </div>
                     </div>
+                    <div class='card-tail'>
+                        <img src="{% static 'images/people.png' %}" alt="">
+                        <h4>{{ classroom.students.count }} Students</h4>
+                    </div>
                 </div>
-                <div class='card-tail'>
-                    <img src="{% static 'images/people.png' %}" alt="">
-                    <h4>60 participants</h4>
-                </div>
-            </div>
-            
+            {% endfor %}
             
         </div>
     </div>

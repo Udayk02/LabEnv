@@ -1,0 +1,86 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% block content %}
+    <div class='top' style="border-bottom: 2px solid black ;">
+        <a href="#">
+            <button class='participants' onclick="buttonclick();"> 
+                <img src="{% static 'images/people.png' %}" alt="">
+                {{classroom.students.count}} Students
+            </button>
+        </a>
+        <h1 class='heading' style="font-size: 26px ;border-bottom: 2px solid black;"> {{classroom.subject}} </h1>
+        <div id="menu" class="menuOff"> 
+            <div class="students_list">
+                {% for student in students %}
+                    <p>{{student}}</p>
+                {% endfor %}
+            </div>
+        </div> 
+        <a href="{% url 'create_assignment' pk=classroom.id %}">
+            <button class='createbutton'>Post a Question</button>
+        </a>
+    </div>
+    <div class="questions">
+        <div class="allquestions">
+            <h2 class="questions_heading">All Questions</h2>
+            <div class="question-list">
+                {% for assignment in assignments %}
+                    <div class="question">
+                        <div class="question-header">
+                            <p class="tag">Due date & time  :  {{assignment.due_time  }}   {{assignment.due_date}}</p>
+                            <div style="display: flex;margin:0px;">
+                                <p class="tag"> <span class="dot" > </span> {{assignment.status}} </p>
+                                <p class="tag"> <span class="type-dot" >{{assignment.type}}</span>  {{assignment.type}} </p>
+                            </div>
+                        </div>
+                        <p class="question-name">{{assignment.question}} <a href="{% url 'question' pk=assignment.id %}" style="text-decoration: none;"> >> Read more</a></p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="ongoingquestions">
+            <h2 class="questions_heading">Ongoing Questions</h2>
+            <div class="ongoing-questions-list">
+                <div class="ongoing-question">
+                    <div class="question-header">
+                        <p class="tag">Due date : 11/10/2022</p>
+                        <div style="display: flex;margin:0px;">
+                            <p class="tag"> . Assignment </p>
+                        </div>
+                    </div>
+                    <p class="question-name">Submit your email to get the Django cheat sheet. If you are in sdkjfhaskdfhkjsbfkjasdbfkasbfkasjsdk</p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+<script>
+    function buttonclick()    
+    {    
+        var menuList = document.getElementById("menu");    
+        if (menuList.className == "menuOff")    
+        {    
+        
+            menuList.className = "menuOn";    
+        } else    
+        {    
+        
+            menuList.className = "menuOff";    
+        }    
+    }  
+    var dots = Array.from(document.getElementsByClassName('type-dot'));
+    dots.forEach(dot => {
+        if(dot.innerHTML=="poll"){
+            dot.style.backgroundColor = 'cyan';
+        }
+        if(dot.innerHTML=="post"){
+            dot.style.backgroundColor = 'violet';
+        }
+        if(dot.innerHTML=="assignment"){
+            dot.style.backgroundColor = 'sandybrown';
+        }
+        dot.innerHTML=""
+    });
+</script>
+{% endblock %}
