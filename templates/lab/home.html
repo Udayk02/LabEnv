@@ -16,9 +16,11 @@
                 <div class='card'> 
                     <div class='card-header'>
                         <div>
-                            <a href="{% url 'classroom' pk=classroom.id %}" style="text-decoration: none;color: black;">
-                                <h1 class='card-name'>{{classroom.subject}}</h1>
-                            </a>
+                            <div class='card-heading'>
+                                <a href="{% url 'classroom' pk=classroom.id %}" class='card-link' title='{{ classroom.subject }}'>
+                                    {{classroom.subject}}
+                                </a>
+                            </div>
                             <h2 class='card-info'>{{classroom.classname}}</h3>
                             <h3 class='card-info'>{{classroom.host}}</h2>
                         </div>

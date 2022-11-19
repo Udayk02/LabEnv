@@ -4,16 +4,16 @@
 {% block head_title %}{% trans "Create Class" %}{% endblock %}
 {% block content %}
 <div class="centereddiv">
-    <h1>{% trans "Post Assignment" %}</h1>
+    <h1 class='heading'>{% trans "Post Assignment" %}</h1>
     <form method="post" action="{% url 'create_assignment' pk=classroom.id %}" class="loginform">
         {% csrf_token %}
-        <label >{{form.question.label}}</label>
+        <label class='side-heading'>{{form.question.label}}</label>
         {{form.question}}
-        <label >{{form.type.label}}</label>
+        <label class='side-heading'>{{form.type.label}}</label>
         {{form.type}}
-        <label >{{form.type.due_date}}</label>
+        <label class='side-heading'>{{form.type.due_date}}</label>
         {{form.due_date}}
-        <label >{{form.type.due_time}}</label>
+        <label class='side-heading'>{{form.type.due_time}}</label>
         {{form.due_time}}
         <button type="submit",name="save" class="button" ><span>Post Assignment</span></button>
     </form>

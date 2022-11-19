@@ -36,6 +36,7 @@ def create_class(request):
             class_room_details = ClassRoom(subject=subject,classname=classname)
             class_room_details.host = request.user
             class_room_details.save()
+            class_room_details.students.add(request.user)
             return redirect('/lab')
     return render(request, 'lab/create_class.html',{"form":form})
 

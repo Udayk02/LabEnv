@@ -7,12 +7,17 @@
                 <img src="{% static 'images/people.png' %}" alt="">
                 {{classroom.students.count}} Students
             </button>
+
         </a>
         <h1 class='heading' style="font-size: 26px ;border-bottom: 2px solid black;"> {{classroom.subject}} </h1>
         <div id="menu" class="menuOff"> 
             <div class="students_list">
                 {% for student in students %}
-                    <p>{{student}}</p>
+                    {% if student|lower == classroom.host|lower %}
+                        <p>{{student}}(Teacher)</p>
+                    {% else %}
+                        <p>{{student}}</p>
+                    {% endif %}    
                 {% endfor %}
             </div>
         </div> 
