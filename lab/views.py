@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from .forms import create_class_form,create_assignment_form
+from .forms import create_class_form,create_assignment_form,add_answer_form
 from django.contrib.auth.models import User
-from .models import ClassRoom,Assignment
+from .models import ClassRoom,Assignment,Answer
 from django.shortcuts import redirect
 
 
@@ -23,6 +23,8 @@ def classroom(request,pk):
     classroom = ClassRoom.objects.get(id=pk)
     assignments = classroom.assignment_set.all()
     students = classroom.students.all()
+    for assignment in assignments:
+        assignment.question = assignment.question[:400]
     return render(request, 'lab/classroom.html',{'assignments':assignments,'classroom':classroom,'students':students})
 
 @login_required(login_url='/accounts/login')
@@ -60,4 +62,19 @@ def create_assignment(request,pk):
 @login_required(login_url='/accounts/login')
 def question(request,pk):
     assignment = Assignment.objects.get(id=pk)
-    return render(request, 'lab/question.html',{'assignment':assignment})
+    answers = assignment.answer_set.all()
+    form = add_answer_form()
+    return render(request, 'lab/question.html',{'assignment':assignment,'form':form,'answers':answers})
+
+@login_required(login_url='/accounts/login')
+def add_answer(request,pk):
+    assignment_in = Assignment.objects.get(id=pk)
+    form = add_answer_form()
+    if request.method == 'POST':
+        form = add_answer_form(request.POST)
+        if form.is_valid():
+            answer = form.cleaned_data['answer']
+            answer_details = Answer(answer=answer,assignment=assignment_in,student=request.user)
+            answer_details.save()
+            return redirect('question',pk=pk)
+    return render(request, 'lab/question.html',{'form':form})

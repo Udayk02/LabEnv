@@ -1,5 +1,4 @@
 from django import forms
-from .models import ClassRoom
 # from django.forms.widgets import SplitDateTimeField
 
 from django.contrib.admin.widgets import AdminDateWidget,AdminTimeWidget,AdminSplitDateTime
@@ -10,6 +9,10 @@ class create_class_form(forms.Form):
         attrs={'placeholder': 'Enter Subject Name'}))
     classname = forms.CharField(widget=forms.TextInput(
         attrs={'placeholder': 'Enter Class Name'}))
+    
+class add_answer_form(forms.Form):
+    answer = forms.CharField(widget=forms.Textarea(
+        attrs={ 'placeholder': 'Add an answer'}))
 
 
 class create_assignment_form(forms.Form):

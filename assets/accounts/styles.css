@@ -97,6 +97,7 @@ body{
     outline: none;
     border: none;
     background-color: #ffffff;
+    /* width: 100%; */
     border-bottom: 2px solid rgb(20, 104, 222); 
 }
 

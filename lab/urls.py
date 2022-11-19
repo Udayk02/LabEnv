@@ -7,4 +7,5 @@ urlpatterns = [
     path('create_class/', views.create_class, name='create_class'),
     path('create_assignment/<str:pk>', views.create_assignment, name='create_assignment'),
     path('question/<str:pk>', views.question, name='question'),
+    path('add_answer/<str:pk>', views.add_answer, name='add_answer'),
 ]

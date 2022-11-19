@@ -10,8 +10,11 @@
             <h2 class='heading'>Question: {{ assignment.question }}</h2>
             <h2 class='heading' style='margin-bottom: 0'>Answer:</h2>
             <div class='answer_input'>
-                <input type="text" name="answer" id="answer" placeholder='Type your answer'>
-                <button class='createbutton'>Submit</button>
+                <form method="post" action="{% url 'add_answer' pk=assignment.id %}" class="loginform">
+                    {% csrf_token %}
+                    {{form.answer}}
+                    <button type="submit",name="save" class="button" ><span>Post Assignment</span></button>
+                </form>
             </div>
         </div>
         <div class='answer_desc'>
@@ -27,58 +30,23 @@
     <div class='answer_given'>
         <h1 class='answers_heading'>Submitted Answers</h1>
         <div class='answer_list'>
-            <div class='answer'>
-                <div class='answer_header'>
-                    <p class='tag'>Submitted date & time: 11/07/2020, 11:20 PM</p>
-                    <p class='tag'>Submitted by 19131A05A0</p>
+            {% for answer in answers %}
+                <div class='answer'>
+                    <div class='answer_header'>
+                        <p class='tag'>{{answer.created_on}}</p>
+                        <p class='tag'>Submitted by {{answer.student}}</p>
+                    </div>
+                    <p class='answer_name'>{{answer.answer}}</p>
                 </div>
-                <p class='answer_name'>Python is a programming language</p>
-            </div>
-            <div class='answer'>
-                <div class='answer_header'>
-                    <p class='tag'>Submitted date & time: 11/07/2020, 11:20 PM</p>
-                    <p class='tag'>Submitted by 19131A05A0</p>
-                </div>
-                <p class='answer_name'>Python is a programming language</p>
-            </div>
-            <div class='answer'>
-                <div class='answer_header'>
-                    <p class='tag'>Submitted date & time: 11/07/2020, 11:20 PM</p>
-                    <p class='tag'>Submitted by 19131A05A0</p>
-                </div>
-                <p class='answer_name'>Python is a programming language</p>
-            </div>
-            <div class='answer'>
-                <div class='answer_header'>
-                    <p class='tag'>Submitted date & time: 11/07/2020, 11:20 PM</p>
-                    <p class='tag'>Submitted by 19131A05A0</p>
-                </div>
-                <p class='answer_name'>Python is a programming language</p>
-            </div>
-            <div class='answer'>
-                <div class='answer_header'>
-                    <p class='tag'>Submitted date & time: 11/07/2020, 11:20 PM</p>
-                    <p class='tag'>Submitted by 19131A05A0</p>
-                </div>
-                <p class='answer_name'>Python is a programming language</p>
-            </div>
-            <div class='answer'>
-                <div class='answer_header'>
-                    <p class='tag'>Submitted date & time: 11/07/2020, 11:20 PM</p>
-                    <p class='tag'>Submitted by 19131A05A0</p>
-                </div>
-                <p class='answer_name'>Python is a programming language</p>
-            </div>
-            <div class='answer'>
-                <div class='answer_header'>
-                    <p class='tag'>Submitted date & time: 11/07/2020, 11:20 PM</p>
-                    <p class='tag'>Submitted by 19131A05A0</p>
-                </div>
-                <p class='answer_name'>Python is a programming language</p>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
 
-    
+<script>
+    var inputs = document.getElementsByTagName('input').type='text';
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].type == "text"
+    }
+</script>
 {% endblock %}
