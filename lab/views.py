@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from .forms import create_class_form,create_assignment_form,add_answer_form
+from .forms import create_class_form,create_assignment_form,create_poll_form,add_answer_form,ParticipantsForm
 from django.contrib.auth.models import User
-from .models import ClassRoom,Assignment,Answer
+from .models import ClassRoom,Assignment,Answer,Poll
 from django.shortcuts import redirect
-
+import datetime
 
 
 @login_required(login_url='/accounts/login')
@@ -23,9 +23,25 @@ def classroom(request,pk):
     classroom = ClassRoom.objects.get(id=pk)
     assignments = classroom.assignment_set.all()
     students = classroom.students.all()
+    form = ParticipantsForm()
+
     for assignment in assignments:
         assignment.question = assignment.question[:400]
-    return render(request, 'lab/classroom.html',{'assignments':assignments,'classroom':classroom,'students':students})
+        date = str(assignment.due_date).split('-')
+        time = str(assignment.due_time).split(':')
+        date_time = date+time
+        date_time = list(map(int,date_time))
+        due_date =datetime.datetime(*date_time)
+        current_date = datetime.datetime.now()
+        if(due_date<current_date):
+            assignment.status = "completed"
+            assignment.save()
+    ongoing_assignments=[]
+    for assignment in assignments:
+        if(assignment.status=='ongoing'):
+            assignment.question = assignment.question[:50]
+            ongoing_assignments.append(assignment)
+    return render(request, 'lab/classroom.html',{'assignments':assignments,'classroom':classroom,'students':students,'form':form,'ongoing_assignments':ongoing_assignments})
 
 @login_required(login_url='/accounts/login')
 def create_class(request):
@@ -56,6 +72,8 @@ def create_assignment(request,pk):
             assignment_details = Assignment(question=question,type=type,due_date=due_date,due_time=due_time)
             assignment_details.class_in = classroom
             assignment_details.save()
+            if(assignment_details.type=='poll'):
+                return redirect('create_poll',pk=assignment_details.id)
             return redirect('classroom',pk=pk)
     return render(request, 'lab/create_assignment.html',{"form":form,"classroom":classroom})
 
@@ -65,6 +83,21 @@ def question(request,pk):
     answers = assignment.answer_set.all()
     form = add_answer_form()
     return render(request, 'lab/question.html',{'assignment':assignment,'form':form,'answers':answers})
+
+@login_required(login_url='/accounts/login')
+def add_participants(request,pk):
+    form = ParticipantsForm()
+    classroom = ClassRoom.objects.get(id=pk)
+    if request.method == 'POST':
+        form = ParticipantsForm(request.POST)
+        if form.is_valid():
+            # answer = form.cleaned_data['answer']
+            students = form.cleaned_data['students']
+            for student in students:
+                add_student = User.objects.get(username=student)
+                classroom.students.add(add_student)
+            return redirect('classroom',pk=pk)
+    return render(request, 'lab/question.html')
 
 @login_required(login_url='/accounts/login')
 def add_answer(request,pk):
@@ -78,3 +111,21 @@ def add_answer(request,pk):
             answer_details.save()
             return redirect('question',pk=pk)
     return render(request, 'lab/question.html',{'form':form})
+
+
+@login_required(login_url='/accounts/login')
+def create_poll(request,pk):
+    assignment_in = Assignment.objects.get(id=pk)
+    form = create_poll_form()
+    if request.method == 'POST':
+        form = create_poll_form(request.POST)
+        if form.is_valid():
+            option_1 = form.cleaned_data['option_1']
+            option_2 = form.cleaned_data['option_2']
+            option_3 = form.cleaned_data['option_3']
+            option_4 = form.cleaned_data['option_4']
+            option_5 = form.cleaned_data['option_5']
+            poll = Poll(assignment_in=assignment_in,question=assignment_in.question,option_one=option_1,option_two=option_2,option_three=option_3,option_four=option_4,option_five=option_5)
+            poll.save()
+            return redirect('question',pk=pk)
+    return render(request, 'lab/create_poll.html',{'form':form,'assignment':assignment_in})

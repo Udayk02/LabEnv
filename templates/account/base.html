@@ -1,9 +1,11 @@
 {% load static %}
+
 <link rel="stylesheet" href="{% static 'accounts/styles.css' %}" >
 <!DOCTYPE html>
 <html>
   <head>
     <title>{% block head_title %}{% endblock %}</title>
+    {{ form.media.css }}
     {% block extra_head %}
     {% endblock %}
   </head>

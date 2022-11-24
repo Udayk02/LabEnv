@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'lab',
+    'django_select2',
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -177,3 +178,5 @@ STATICFILES_DIRS = [BASE_DIR / "assets"]
 LOGOUT_REDIRECT_URL="http://localhost:8000/accounts/login/"
 #redirects when loggen in
 LOGIN_REDIRECT_URL="http://localhost:8000/lab/"
+
+

@@ -1,0 +1,14 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Create Class" %}{% endblock %}
+{% block content %}
+<div class="centereddiv">
+    <h1 class='heading'>{% trans "Post Assignment" %}</h1>
+    <form method="post" action="{% url 'create_poll' pk=assignment.id %}" class="loginform">
+        {% csrf_token %}
+        {{form}}
+        <button type="submit",name="save" class="button" ><span>Post Assignment</span></button>
+    </form>
+</div>
+{% endblock %}
