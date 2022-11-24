@@ -81,8 +81,31 @@ def create_assignment(request,pk):
 def question(request,pk):
     assignment = Assignment.objects.get(id=pk)
     answers = assignment.answer_set.all()
+    if assignment.type == 'poll':
+        poll = assignment.poll
     form = add_answer_form()
-    return render(request, 'lab/question.html',{'assignment':assignment,'form':form,'answers':answers})
+    return render(request, 'lab/question.html',{'assignment':assignment,'form':form,'answers':answers,'poll':poll})
+
+@login_required(login_url='/accounts/login')
+def vote(request, pk):
+    poll = Poll.objects.get(id = pk)
+    if request.method == 'POST':
+        options = request.POST['poll']
+        if options == 'option1':
+            poll.option_one_count += 1
+        elif options == 'option2':
+            poll.option_two_count += 1
+        elif options == 'option3':
+            poll.option_three_count += 1
+        elif options == 'option4':
+            poll.option_four_count += 1
+        elif options == 'option5':
+            poll.option_five_count += 1
+        else:
+            HttpResponse(400, 'Invalid form')
+        poll.save()
+        return redirect('question',pk=poll.assignment_in.id)
+    return render(request, "lab/question.html")
 
 @login_required(login_url='/accounts/login')
 def add_participants(request,pk):

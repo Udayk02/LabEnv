@@ -9,13 +9,40 @@
         <div class="answer_area">
             <h2 class='heading'>Question: {{ assignment.question }}</h2>
             <h2 class='heading' style='margin-bottom: 0'>Answer:</h2>
-            <div class='answer_input'>
+            {% comment %} <div class='answer_input'>
                 <form method="post" action="{% url 'add_answer' pk=assignment.id %}" class="loginform">
                     {% csrf_token %}
                     {{form.answer}}
-                    <button type="submit",name="save" class="button" ><span>Post Assignment</span></button>
+                    <button type="submit" name="save" class="button" ><span>Post Assignment</span></button>
                 </form>
-            </div>
+            </div> {% endcomment %}
+        </div>
+        <div>
+            <h2 class='heading'>Question: {{ poll.question }}</h2>
+            <form method="post" action="{% url 'vote' pk=poll.id %}">
+                {% csrf_token %}
+                <label>
+                    <input type="radio" name="poll" value="option1" required>
+                    {{ poll.option_one }}
+                </label> &nbsp;
+                <label>
+                    <input type="radio" name="poll" value="option2">
+                    {{ poll.option_two }}
+                </label> &nbsp;
+                <label>
+                    <input type="radio" name="poll" value="option3">
+                    {{ poll.option_three }}
+                </label> &nbsp;
+                <label>
+                    <input type="radio" name="poll" value="option4">
+                    {{ poll.option_four }}
+                </label> &nbsp;
+                <label>
+                    <input type="radio" name="poll" value="option5">
+                    {{ poll.option_five }}
+                </label> &nbsp;
+                <button type='submit' ><span>Vote</span></button>
+            </form>
         </div>
         <div class='answer_desc'>
             <h2 class='heading'>{{answers.count}} Answers</h2>

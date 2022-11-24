@@ -52,3 +52,7 @@ class Poll(models.Model):
     option_three_count = models.IntegerField(default=-1)
     option_four_count = models.IntegerField(default=-1)
     option_five_count = models.IntegerField(default=-1)
+    
+class Voter(models.Model):
+    voter = models.ForeignKey(User, on_delete=models.CASCADE)
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
