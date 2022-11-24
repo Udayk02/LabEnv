@@ -24,7 +24,7 @@ class Assignment(models.Model):
     updated = models.DateTimeField(auto_now=True)
     due_date = models.DateField(blank=True)
     due_time = models.TimeField(default=False,blank=True)
-    status = models.IntegerField(default=1,blank=True)
+    status = models.CharField(default='ongoing',max_length=20)
     question = models.TextField(max_length=500)
 
     class Meta:
@@ -39,3 +39,16 @@ class Answer(models.Model):
     class Meta:
         ordering = ['-created_on']
 
+class Poll(models.Model):
+    assignment_in = models.ForeignKey(Assignment,on_delete=models.CASCADE,default=False)
+    question = models.TextField(max_length=500)
+    option_one = models.CharField(max_length=30,blank=True)
+    option_two = models.CharField(max_length=30,blank=True)
+    option_three = models.CharField(max_length=30,blank=True)
+    option_four = models.CharField(max_length=30,blank=True)
+    option_five = models.CharField(max_length=30,blank=True)
+    option_one_count = models.IntegerField(default=-1)
+    option_two_count = models.IntegerField(default=-1)
+    option_three_count = models.IntegerField(default=-1)
+    option_four_count = models.IntegerField(default=-1)
+    option_five_count = models.IntegerField(default=-1)

@@ -11,6 +11,11 @@
         </a>
         <h1 class='heading' style="font-size: 26px ;border-bottom: 2px solid black;"> {{classroom.subject}} </h1>
         <div id="menu" class="menuOff"> 
+            <form method="POST" style="display: flex;align-items: center;" class="loginform" action="{% url 'add_participants' pk=classroom.id %}">
+                {% csrf_token %}
+                {{ form.students }}
+                <button type="submit" style="margin: 0;padding: 0;" class="participants_button"><img src="{% static 'images/plus.png' %}" alt=""></button>
+            </form>
             <div class="students_list">
                 {% for student in students %}
                     {% if student|lower == classroom.host|lower %}
@@ -20,6 +25,7 @@
                     {% endif %}    
                 {% endfor %}
             </div>
+            
         </div> 
         <a href="{% url 'create_assignment' pk=classroom.id %}">
             <button class='createbutton'>Post a Question</button>
@@ -34,7 +40,7 @@
                         <div class="question-header">
                             <p class="tag">Due date & time  :  {{assignment.due_time  }}   {{assignment.due_date}}</p>
                             <div style="display: flex;margin:0px;">
-                                <p class="tag"> <span class="dot" > </span> {{assignment.status}} </p>
+                                <p class="tag"> <span class="status-dot" > {{assignment.status}} </span> {{assignment.status}} </p>
                                 <p class="tag"> <span class="type-dot" >{{assignment.type}}</span>  {{assignment.type}} </p>
                             </div>
                         </div>
@@ -46,20 +52,23 @@
         <div class="ongoingquestions">
             <h2 class="questions_heading">Ongoing Questions</h2>
             <div class="ongoing-questions-list">
-                <div class="ongoing-question">
-                    <div class="question-header">
-                        <p class="tag">Due date : 11/10/2022</p>
-                        <div style="display: flex;margin:0px;">
-                            <p class="tag"> . Assignment </p>
+                {% for ongoing_assignment in ongoing_assignments %}
+                    <div class="ongoing-question">
+                        <div class="question-header">
+                            <p class="tag">Due : {{ongoing_assignment.due_time  }}   {{ongoing_assignment.due_date}}</p>
+                            <div style="display: flex;margin:0px;">
+                                <p class="tag"> <span class="type-dot" >{{ongoing_assignment.type}}</span> {{ongoing_assignment.type}} </p>
+                            </div>
                         </div>
+                        <p class="question-name">{{ongoing_assignment.question}} <a href="{% url 'question' pk=ongoing_assignment.id %}" style="text-decoration: none;"> >> Read more</a></p>
                     </div>
-                    <p class="question-name">Submit your email to get the Django cheat sheet. If you are in sdkjfhaskdfhkjsbfkjasdbfkasbfkasjsdk</p>
-                </div>
+                {% endfor %}
                 
             </div>
         </div>
     </div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{{ form.media.js }}
 <script>
     function buttonclick()    
     {    
@@ -74,7 +83,20 @@
             menuList.className = "menuOff";    
         }    
     }  
+    var status_dots = Array.from(document.getElementsByClassName('status-dot'));
     var dots = Array.from(document.getElementsByClassName('type-dot'));
+    status_dots.forEach(dot => {
+        console.log(dot.innerHTML)
+        console.log(typeof(dot.innerHTML))
+        console.log(typeof('ongoing'))
+        if(dot.innerHTML.trim()=='ongoing'){
+            dot.style.backgroundColor = "rgb(61, 216, 72)";
+        }
+        if(dot.innerHTML.trim()=='completed'){
+            dot.style.backgroundColor = 'red';
+        }
+        dot.innerHTML=""
+    });
     dots.forEach(dot => {
         if(dot.innerHTML=="poll"){
             dot.style.backgroundColor = 'cyan';

@@ -24,5 +24,6 @@ urlpatterns = [
     #lab routes
     path('lab/',include('lab.urls'),name="home"),
     #redirecting the empty path to loggedin page
+    path("select2/", include("django_select2.urls")),
     path('', RedirectView.as_view(url='accounts/login')),
 ]
