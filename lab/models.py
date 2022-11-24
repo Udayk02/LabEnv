@@ -40,7 +40,7 @@ class Answer(models.Model):
         ordering = ['-created_on']
 
 class Poll(models.Model):
-    assignment_in = models.ForeignKey(Assignment,on_delete=models.CASCADE,default=False)
+    assignment_in = models.OneToOneField(Assignment,on_delete=models.CASCADE,default=False)
     question = models.TextField(max_length=500)
     option_one = models.CharField(max_length=30,blank=True)
     option_two = models.CharField(max_length=30,blank=True)
