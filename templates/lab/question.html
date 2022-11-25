@@ -6,44 +6,123 @@
 <div class='answers'>
 
     <div class='answer_div'>
+        {% if assignment.type|lower == "post"|lower %}
+            <div class="answer_area">
+                <h2 class='heading'>Question: {{ assignment.question }}</h2>
+                <h2 class='heading' style='margin-bottom: 0'>Answer:</h2>
+                <div class='answer_input'>
+                    <form method="post" action="{% url 'add_answer' pk=assignment.id %}" class="loginform">
+                        {% csrf_token %}
+                        {{form.answer}}
+                        <button type="submit" name="save" class="button" ><span>Post Answer</span></button>
+                    </form>
+                </div> 
+            </div>
+        {% endif %}
+        {% if assignment.type|lower == "poll"|lower %}
         <div class="answer_area">
-            <h2 class='heading'>Question: {{ assignment.question }}</h2>
-            <h2 class='heading' style='margin-bottom: 0'>Answer:</h2>
-            {% comment %} <div class='answer_input'>
-                <form method="post" action="{% url 'add_answer' pk=assignment.id %}" class="loginform">
-                    {% csrf_token %}
-                    {{form.answer}}
-                    <button type="submit" name="save" class="button" ><span>Post Assignment</span></button>
-                </form>
-            </div> {% endcomment %}
-        </div>
-        <div>
             <h2 class='heading'>Question: {{ poll.question }}</h2>
-            <form method="post" action="{% url 'vote' pk=poll.id %}">
-                {% csrf_token %}
-                <label>
-                    <input type="radio" name="poll" value="option1" required>
-                    {{ poll.option_one }}
-                </label> &nbsp;
-                <label>
-                    <input type="radio" name="poll" value="option2">
-                    {{ poll.option_two }}
-                </label> &nbsp;
-                <label>
-                    <input type="radio" name="poll" value="option3">
-                    {{ poll.option_three }}
-                </label> &nbsp;
-                <label>
-                    <input type="radio" name="poll" value="option4">
-                    {{ poll.option_four }}
-                </label> &nbsp;
-                <label>
-                    <input type="radio" name="poll" value="option5">
-                    {{ poll.option_five }}
-                </label> &nbsp;
-                <button type='submit' ><span>Vote</span></button>
-            </form>
-        </div>
+                {% if user not in voters %}
+                    <form method="post" action="{% url 'vote' pk=poll.id %}" class="loginform">
+                        {% csrf_token %}
+                        {% if poll.option_one %}
+                            <div class="vote">
+                                <input type="radio" name="poll" value="option1">
+                                <label class="poll_label">
+                                    {{ poll.option_one }}
+                                </label>
+                            </div>
+                        {% endif %}
+                        {% if poll.option_two %}
+                            <div class="vote">
+                                <input type="radio" name="poll" value="option2">
+                                <label class="poll_label">
+                                    {{ poll.option_two }}
+                                </label>
+                            </div>
+                        {% endif %}    
+                        {% if poll.option_three %}
+                            <div class="vote">
+                                <input type="radio" name="poll" value="option3">
+                                <label class="poll_label">
+                                    {{ poll.option_three }}
+                                </label>
+                            </div>
+                        {% endif %}
+                        {% if poll.option_four %}
+                            <div class="vote">
+                                <input type="radio" name="poll" value="option4">
+                                <label class="poll_label">
+                                    {{ poll.option_four }}
+                                </label>
+                            </div>
+                        {% endif %}
+                        {% if poll.option_five %}
+                            <div class="vote">
+                                <input type="radio" name="poll" value="option5">
+                                <label class="poll_label">
+                                    {{ poll.option_five }}
+                                </label>
+                            </div>
+                        {% endif %}
+                        <button type='submit' ><span>Vote</span></button>
+                    </form>
+                {% else %}
+                    <div class="votes">
+                        {% if poll.option_one %}
+                            <div class="vote">
+                                <label class="poll_label">
+                                    {{ poll.option_one }}
+                                </label>
+                                <p>
+                                    {{poll.option_one_count}} votes
+                                </p>
+                            </div>
+                        {% endif %}
+                        {% if poll.option_two %}
+                            <div class="vote">
+                                <label class="poll_label">
+                                    {{ poll.option_two }}
+                                </label>
+                                <p>
+                                    {{poll.option_two_count}} votes
+                                </p>
+                            </div>
+                        {% endif %}    
+                        {% if poll.option_three %}
+                            <div class="vote">
+                                <label class="poll_label">
+                                    {{ poll.option_three }}
+                                </label>
+                                <p>
+                                    {{poll.option_three_count}} votes
+                                </p>
+                            </div>
+                        {% endif %}
+                        {% if poll.option_four %}
+                            <div class="vote">
+                                <label class="poll_label">
+                                    {{ poll.option_four }}
+                                </label>
+                                <p>
+                                    {{poll.option_four_count}} votes
+                                </p>
+                            </div>
+                        {% endif %}
+                        {% if poll.option_five %}
+                            <div class="vote">
+                                <label class="poll_label">
+                                    {{ poll.option_five }}
+                                </label>
+                                <p>
+                                    {{poll.option_five_count}} votes
+                                </p>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
         <div class='answer_desc'>
             <h2 class='heading'>{{answers.count}} Answers</h2>
             <div>
@@ -53,21 +132,22 @@
             </div>
         </div>
     </div>
-    
-    <div class='answer_given'>
-        <h1 class='answers_heading'>Submitted Answers</h1>
-        <div class='answer_list'>
-            {% for answer in answers %}
-                <div class='answer'>
-                    <div class='answer_header'>
-                        <p class='tag'>{{answer.created_on}}</p>
-                        <p class='tag'>Submitted by {{answer.student}}</p>
+    {% if assignment.type|lower == "post"|lower %}
+        <div class='answer_given'>
+            <h1 class='answers_heading'>Submitted Answers</h1>
+            <div class='answer_list'>
+                {% for answer in answers %}
+                    <div class='answer'>
+                        <div class='answer_header'>
+                            <p class='tag'>{{answer.created_on}}</p>
+                            <p class='tag'>Submitted by {{answer.student}}</p>
+                        </div>
+                        <p class='answer_name'>{{answer.answer}}</p>
                     </div>
-                    <p class='answer_name'>{{answer.answer}}</p>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
-    </div>
+    {% endif %}
 </div>
 
 <script>
@@ -75,5 +155,34 @@
     for (var i = 0; i < inputs.length; i++) {
         inputs[i].type == "text"
     }
+    function buttonclick()    
+    {    
+        var menuList = document.getElementById("menu");    
+        if (menuList.className == "menuOff")    
+        {    
+        
+            menuList.className = "menuOn";    
+        } else    
+        {    
+        
+            menuList.className = "menuOff";    
+        }    
+    }  
+    var list=document.querySelectorAll('input[type=radio]')
+    for (var i = 0; i < list.length; i++) {
+        if(list[i].checked==false){
+            list[i].parentElement.style.backgroundColor='white';
+        }
+    }
+    window.onclick = e => {
+        if(e.target.checked){
+            e.target.parentElement.style.backgroundColor="#A294FF";
+        }
+        for (var i = 0; i < list.length; i++) {
+            if(list[i].checked==false){
+                list[i].parentElement.style.backgroundColor='white';
+            }
+        }
+    } 
 </script>
 {% endblock %}

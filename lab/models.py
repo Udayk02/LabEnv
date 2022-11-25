@@ -28,7 +28,7 @@ class Assignment(models.Model):
     question = models.TextField(max_length=500)
 
     class Meta:
-        ordering = ['-updated', '-created']
+        ordering = ['-created']
 
 class Answer(models.Model):
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)

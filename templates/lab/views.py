@@ -3,11 +3,10 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .forms import create_class_form,create_assignment_form,create_poll_form,add_answer_form,ParticipantsForm
 from django.contrib.auth.models import User
-from .models import ClassRoom,Assignment,Answer,Poll,Voter
+from .models import ClassRoom,Assignment,Answer,Poll
 from django.shortcuts import redirect
 import datetime
 import subprocess, sys
-
 
 def compile(request):
     if request.method == "POST":
@@ -92,7 +91,7 @@ def compile(request):
                 final_output = output
         print(final_output)
             
-    return render(request, 'lab/compiler.html',{"final_output":final_output})
+    return render(request, 'lab/compiler.html')
 
 @login_required(login_url='/accounts/login')
 def home(request):
@@ -167,18 +166,10 @@ def create_assignment(request,pk):
 def question(request,pk):
     assignment = Assignment.objects.get(id=pk)
     answers = assignment.answer_set.all()
-    poll=None
-    voters=[]
     if assignment.type == 'poll':
         poll = assignment.poll
-        voters = poll.voter_set.all()
-    if assignment.type == 'assignment':
-        print("assignment")
     form = add_answer_form()
-    vote_list = []
-    for voter in voters:
-        vote_list.append(voter.voter)
-    return render(request, 'lab/question.html',{'assignment':assignment,'form':form,'answers':answers,'poll':poll,"voters":vote_list})
+    return render(request, 'lab/question.html',{'assignment':assignment,'form':form,'answers':answers,'poll':poll})
 
 @login_required(login_url='/accounts/login')
 def vote(request, pk):
@@ -198,8 +189,6 @@ def vote(request, pk):
         else:
             HttpResponse(400, 'Invalid form')
         poll.save()
-        v = Voter(voter=request.user,poll=poll)
-        v.save()
         return redirect('question',pk=poll.assignment_in.id)
     return render(request, "lab/question.html")
 
@@ -245,16 +234,6 @@ def create_poll(request,pk):
             option_4 = form.cleaned_data['option_4']
             option_5 = form.cleaned_data['option_5']
             poll = Poll(assignment_in=assignment_in,question=assignment_in.question,option_one=option_1,option_two=option_2,option_three=option_3,option_four=option_4,option_five=option_5)
-            if(option_1):
-                poll.option_one_count=0
-            if(option_2):
-                poll.option_two_count=0
-            if(option_3):
-                poll.option_three_count=0
-            if(option_4):
-                poll.option_four_count=0
-            if(option_5):
-                poll.option_five_count=0
             poll.save()
             return redirect('question',pk=pk)
     return render(request, 'lab/create_poll.html',{'form':form,'assignment':assignment_in})

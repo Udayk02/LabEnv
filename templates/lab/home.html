@@ -12,10 +12,6 @@
     <div class='class'>
         <div style="display: flex;justify-content:space-between;align-items: center;">
             <h1 class='heading' style="font-size: 28px;">My Classes</h1>
-            <div class="scrollbuttons">
-                <button onclick="left_move()">left</button>
-                <button onclick="right_move()">right</button>
-            </div>
         </div>
         <div class='classes'>
             {% for classroom in classes %}
@@ -90,30 +86,6 @@
 <script>
     function myFunction(x) {
       x.classList.toggle("change");
-    }
-    function sideScroll(element,direction,speed,distance,step){
-        scrollamount = 0;
-        var slideTimer = setInterval(function(){
-            if(direction == 'right'){
-                element.scrollLeft += step;
-            }
-            else{
-                element.scrollLeft -= step;
-            }
-            scrollamount += step;
-            if(scrollamount > distance){
-                window.clearInterval(slideTimer);
-            }
-        })
-    }   
-    function right_move(){
-        var container = document.getElementsByClassName("class");
-        console.log(container)
-        sideScroll(container , 'right',5,1325,265);
-    }
-    function left_move(){
-        var container = document.getElementsByClassName("class");
-        sideScroll(container , 'left',5,1325,265);
     }
 </script>
 
