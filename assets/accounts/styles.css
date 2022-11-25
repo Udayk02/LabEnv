@@ -647,13 +647,14 @@ a{
 }
 
 #editor{
-    display: block;
-    height: 400px;
+    display: flex;
+    height: 500px;
     width: 100%;
-    background-color: antiquewhite;
+    background-color:rgb(246, 237, 237);
     font-size: 20px;
     color: black;
-    position:absolute;
+    margin-left: 30px;
+    border: 1px solid black;
 }
 #lang{
     height: 2em;
@@ -661,11 +662,12 @@ a{
 }
 #output{
     color: black;
-    margin-left: 12px;
-    margin-top: 80px;
-    background-color: antiquewhite;
-    width: 50%;
-    height: 400px;
+    margin-left: 80px;
+    margin-top: 156px;
+    float: right;
+    background-color: rgb(246, 237, 237);
+    width: 80%;
+    height: 200px;
     margin-bottom: 84px;
     font-size: 20px;
     resize: none;
@@ -677,22 +679,64 @@ a{
     display: flex;
     align-items: center;
 }
-#tail > #input{
+#input{
     color: black;
-    width: 50%;
-    height: 100%;
-    background-color: antiquewhite;
+    width: 80%;
+    height: 25%;
+    background-color: rgb(246, 237, 237);
     font-size: 20px;
+    border: 1px solid black;
+    margin-left: 80px;
 }
 
-.run {
-    width: 5em;
-    height: 2em;
-    margin: auto;
+.compile_run{
+    display: flex;
 }
 
+.button-forms{
+    display: flex;
+    margin-top: 70px;
+    width: 80%;
+    margin-left: 80px;
+    justify-content:space-between;
+}
 
+.heading-lab{
+    color: #534292;
+    font-size: x-large;
+    font-family: 'Ubuntu', sans-serif;
+    margin:0;
+    padding:10px;
+    margin-left: 30px;
+    margin-top: 70px;
+    border:2px solid black;
+    border-radius: 10px;
+    width:93%;
+}
 
+.list-group {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ccc;
+    border-radius: .5em;
+    width:100%;
+    margin-bottom: 20px;
+}
+
+.list-group li {
+    border-top: 1px solid #ccc;
+    padding: .5em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.list-group li:first-child {
+    border-top: 0;
+}
 
 
 

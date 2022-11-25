@@ -8,8 +8,110 @@ from django.shortcuts import redirect
 import datetime
 import subprocess, sys
 
+def submit_code(request,pk):
+    assignment = Assignment.objects.get(id = pk)
+    answers = assignment.answer_set.all()
+    answer_count = len(answers)
+    current_user = request.user
+    current_id = str(assignment.id)
+    current_file = "submissions/" + current_id + "_" + str(answer_count + 1)
+    final_output = ""
+    for answer in answers:
+        if(request.user==answer.student):
+            return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk,"assignment":assignment}) 
+    
+    if request.method == "POST":
+        print(current_file)
+        code = ""
+        input_text = ""
+        print(request.POST)
+        if len(request.POST["code1"]) > 0:
+            code = str(request.POST["code1"])
+            code = "\n".join(code.split("~"))
+        if len(request.POST["code_input1"]) > 0:
+            input_text = request.POST["code_input1"]
+            input_text = "\n".join(input_text.split("~"))
+        language = request.POST["language1"]
+        with open("input.txt", "w") as input_file:
+            input_file.write(input_text)
+        sys.stdin = open("input.txt", "r")
+        
+        if (language == '50'):
+            with open(current_file + ".c", "w") as code_file:
+                code_file.write(code)
+            try:
+                output = subprocess.check_output(
+                "gcc " + current_file + ".c -o c_code", stderr=subprocess.STDOUT, shell=True, timeout=3,
+                universal_newlines=True, stdin=sys.stdin)
+            except subprocess.CalledProcessError as exc:
+                final_output = str(exc.returncode) + " " + exc.output
+            else:
+                try:
+                    output = subprocess.check_output(
+                    current_file, stderr=subprocess.STDOUT, shell=True, timeout=3,
+                    universal_newlines=True, stdin=sys.stdin)
+                except subprocess.CalledProcessError as exc:
+                    final_output = str(exc.returncode) + " " + exc.output
+                else:
+                    final_output = output
+        elif (language == '54'):
+            with open(current_file + ".cpp", "w") as code_file:
+                code_file.write(code)
+            try:
+                output = subprocess.check_output(
+                "g++ " + current_file + ".cpp -o cpp_code", stderr=subprocess.STDOUT, shell=True, timeout=3,
+                universal_newlines=True, stdin=sys.stdin)
+            except subprocess.CalledProcessError as exc:
+                final_output = str(exc.returncode) + " " + exc.output
+            else:
+                try:
+                    output = subprocess.check_output(
+                    current_file, stderr=subprocess.STDOUT, shell=True, timeout=3,
+                    universal_newlines=True, stdin=sys.stdin)
+                except subprocess.CalledProcessError as exc:
+                    final_output = str(exc.returncode) + " " + exc.output
+                else:
+                    final_output = output
+        elif (language == '62'):
+            code = code.replace("Main", "J" + current_id + "_" + str(answer_count + 1))
+            with open("J" + current_file + ".java", "w") as code_file:
+                code_file.write(code)
+            try:
+                output = subprocess.check_output(
+                "javac " + current_file + ".java", stderr=subprocess.STDOUT, shell=True, timeout=3,
+                universal_newlines=True, stdin=sys.stdin)
+            except subprocess.CalledProcessError as exc:
+                final_output = str(exc.returncode) + " " + exc.output
+            else:
+                try:
+                    output = subprocess.check_output(
+                    "java " + current_file, stderr=subprocess.STDOUT, shell=True, timeout=3,
+                    universal_newlines=True, stdin=sys.stdin)
+                except subprocess.CalledProcessError as exc:
+                    final_output = str(exc.returncode) + " " + exc.output
+                else:
+                    final_output = output
+        elif (language == '71'):
+            with open(current_file + ".py", "w") as code_file:
+                code_file.write(code)
+            try:
+                output = subprocess.check_output(
+                "python " + current_file + ".py", stderr=subprocess.STDOUT, shell=True, timeout=3,
+                universal_newlines=True, stdin=sys.stdin)
+            except subprocess.CalledProcessError as exc:
+                final_output = str(exc.returncode) + " " + exc.output
+            else:
+                final_output = output
+                
+        answer_details = Answer(assignment = assignment, student = current_user, answer = str(answer_count + 1))
+        answer_details.save()
+        print(answer_details)
+        print(final_output)
+            
+    return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk,"assignment":assignment})
 
-def compile(request,pk):
+def run_code(request,pk):
+    assignment = Assignment.objects.get(id=pk)
     final_output = ""
     if request.method == "POST":
         code = ""
@@ -30,14 +132,14 @@ def compile(request,pk):
                 code_file.write(code)
             try:
                 output = subprocess.check_output(
-                "gcc code.c -o c_code", stderr=subprocess.STDOUT, shell=True, timeout=3,
+                "gcc " + "code" + ".c -o c_code", stderr=subprocess.STDOUT, shell=True, timeout=3,
                 universal_newlines=True, stdin=sys.stdin)
             except subprocess.CalledProcessError as exc:
                 final_output = str(exc.returncode) + " " + exc.output
             else:
                 try:
                     output = subprocess.check_output(
-                    "c_code", stderr=subprocess.STDOUT, shell=True, timeout=3,
+                    "code", stderr=subprocess.STDOUT, shell=True, timeout=3,
                     universal_newlines=True, stdin=sys.stdin)
                 except subprocess.CalledProcessError as exc:
                     final_output = str(exc.returncode) + " " + exc.output
@@ -48,14 +150,14 @@ def compile(request,pk):
                 code_file.write(code)
             try:
                 output = subprocess.check_output(
-                "g++ code.cpp -o cpp_code", stderr=subprocess.STDOUT, shell=True, timeout=3,
+                "g++ " + "code" + ".cpp -o cpp_code", stderr=subprocess.STDOUT, shell=True, timeout=3,
                 universal_newlines=True, stdin=sys.stdin)
             except subprocess.CalledProcessError as exc:
                 final_output = str(exc.returncode) + " " + exc.output
             else:
                 try:
                     output = subprocess.check_output(
-                    "cpp_code", stderr=subprocess.STDOUT, shell=True, timeout=3,
+                    "code", stderr=subprocess.STDOUT, shell=True, timeout=3,
                     universal_newlines=True, stdin=sys.stdin)
                 except subprocess.CalledProcessError as exc:
                     final_output = str(exc.returncode) + " " + exc.output
@@ -66,7 +168,7 @@ def compile(request,pk):
                 code_file.write(code)
             try:
                 output = subprocess.check_output(
-                "javac Main.java", stderr=subprocess.STDOUT, shell=True, timeout=3,
+                "javac " + "Main" + ".java", stderr=subprocess.STDOUT, shell=True, timeout=3,
                 universal_newlines=True, stdin=sys.stdin)
             except subprocess.CalledProcessError as exc:
                 final_output = str(exc.returncode) + " " + exc.output
@@ -84,7 +186,7 @@ def compile(request,pk):
                 code_file.write(code)
             try:
                 output = subprocess.check_output(
-                "python code.py", stderr=subprocess.STDOUT, shell=True, timeout=3,
+                "python " + "code" + ".py", stderr=subprocess.STDOUT, shell=True, timeout=3,
                 universal_newlines=True, stdin=sys.stdin)
             except subprocess.CalledProcessError as exc:
                 final_output = str(exc.returncode) + " " + exc.output
@@ -92,7 +194,7 @@ def compile(request,pk):
                 final_output = output
         print(final_output)
             
-    return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk})
+    return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk,"assignment":assignment})
 
 @login_required(login_url='/accounts/login')
 def home(request):
@@ -173,7 +275,9 @@ def question(request,pk):
         poll = assignment.poll
         voters = poll.voter_set.all()
     if assignment.type == 'assignment':
-        return redirect('compiler',pk=pk)
+        if(request.user==assignment.class_in.host):
+            return render(request,'lab/question.html',{'assignment':assignment,'answers':answers})
+        return redirect('compiler_run',pk=pk)
     form = add_answer_form()
     vote_list = []
     for voter in voters:
