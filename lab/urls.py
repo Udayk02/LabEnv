@@ -11,5 +11,5 @@ urlpatterns = [
     path('add_answer/<str:pk>', views.add_answer, name='add_answer'),
     path('add_participants/<str:pk>', views.add_participants, name='add_participants'),
     path('create_poll/<str:pk>', views.create_poll, name='create_poll'),
-    path('compiler', views.compile, name='compiler'),
+    path('compiler/<str:pk>', views.compile, name='compiler'),
 ]

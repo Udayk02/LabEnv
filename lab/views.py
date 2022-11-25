@@ -9,11 +9,11 @@ import datetime
 import subprocess, sys
 
 
-def compile(request):
+def compile(request,pk):
+    final_output = ""
     if request.method == "POST":
         code = ""
         input_text = ""
-        final_output = ""
         if len(request.POST["code"]) > 0:
             code = str(request.POST["code"])
             code = "\n".join(code.split("~"))
@@ -92,7 +92,7 @@ def compile(request):
                 final_output = output
         print(final_output)
             
-    return render(request, 'lab/compiler.html',{"final_output":final_output})
+    return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk})
 
 @login_required(login_url='/accounts/login')
 def home(request):
@@ -173,7 +173,7 @@ def question(request,pk):
         poll = assignment.poll
         voters = poll.voter_set.all()
     if assignment.type == 'assignment':
-        print("assignment")
+        return redirect('compiler',pk=pk)
     form = add_answer_form()
     vote_list = []
     for voter in voters:
