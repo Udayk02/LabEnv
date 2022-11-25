@@ -653,6 +653,7 @@ a{
     background-color: antiquewhite;
     font-size: 20px;
     color: black;
+    position:absolute;
 }
 #lang{
     height: 2em;

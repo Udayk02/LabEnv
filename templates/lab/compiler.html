@@ -16,7 +16,7 @@
     <h3 style="color:white">Inputs</h3>
     <div id ="tail">
         <div id="input"></div>
-        <form method="post" action="{% url 'compiler' %}">
+        <form method="post" action="{% url 'compiler' pk=pk %}">
           {% csrf_token %}
           <input type="text" name="language" id="language">
           <textarea name="code" id="code" cols="3" rows="1"></textarea>
