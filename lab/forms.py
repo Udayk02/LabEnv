@@ -17,7 +17,7 @@ class create_class_form(forms.Form):
     
 class add_answer_form(forms.Form):
     answer = forms.CharField(widget=forms.Textarea(
-        attrs={ 'placeholder': 'Add an answer'}))
+        attrs={ 'placeholder': 'Add an answer','class':'answer_text_area'}))
 
 
 class create_assignment_form(forms.Form):
