@@ -2,30 +2,54 @@
 {% load static %}
 
 {% block content %}
-<div style="width:50%;">
-    <div style="display: flex; align-items:center; justify-content:space-between;">
-        <h1 style="color:white">Write Code</h1>
-        <select name="" id="lang" onchange="set_lang()">
-            <option value="71">Python</option>
-            <option value="50">C</option>
-            <option value="54">CPP</option>
-            <option value="62">Java</option>
-        </select>
-    </div>
-    <div id="editor" aria-placeholder="Code Here..."></div>
-    <h3 style="color:white">Inputs</h3>
-    <div id ="tail">
+<div>
+    
+    <div style="display: grid;grid-auto-flow: column;">
+      <div>
+        <div style="display: flex; align-items:center; justify-content:space-between; ">
+          <h1 style="color:rgb(16, 15, 15); margin-left: 5px;">Write Code</h1>
+          <div style="display: flex; align-items:center;margin-left: 5px; ">
+            <select name="" id="lang" onchange="set_lang()">
+                <option value="1">Select a language</option>
+                <option value="71">Python</option>
+                <option value="50">C</option>
+                <option value="54">CPP</option>
+                <option value="62">Java</option>
+            </select>
+        </div>
+        </div>
+
+        <div id="editor" aria-placeholder="Code Here..."></div>
+      </div>
+      <div style="width: 90%;">
+      <div>
+        <h1 style="color:rgb(2, 2, 2); margin-left: 80px;">Inputs</h1>
         <div id="input"></div>
-        <form method="post" action="{% url 'compiler' pk=pk %}">
+      </div>
+      <div id ="tail">
+        <textarea name="" id="output" cols="30" rows="10" placeholder="Output"></textarea>
+      </div>
+
+      <div style="width: auto; height:auto; display: flex; ">
+        <form method="post" action="{% url 'compiler_run' pk=pk %}">
           {% csrf_token %}
           <input type="text" name="language" id="language">
           <textarea name="code" id="code" cols="3" rows="1"></textarea>
           <textarea name="code_input" id="code_input" cols="3" rows="1"></textarea>
           <button type="submit" class="run" onclick="compile()">Run</button>
         </form>
+        <form method="post" action="{% url 'compiler_submit' pk=pk %}">
+          {% csrf_token %}
+          <input type="text" name="language1" id="language1">
+          <textarea name="code1" id="code1" cols="3" rows="1"></textarea>
+          <textarea name="code_input1" id="code_input1" cols="3" rows="1"></textarea>
+          <button type="submit" class="run" onclick="compile1()">Submit</button>
+        </form>
+      </div>
     </div>
+  </div>
+  
 </div>
-<textarea name="" id="output" cols="30" rows="10" readonly>{{final_output}}</textarea>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.5.3/ace.js"></script>
 
@@ -34,6 +58,10 @@
   let input = document.querySelector("#input");
 
   ace.edit(input, {
+    theme: "ace/theme/cobalt",
+    mode: "ace/mode/text",
+  });
+  ace.edit(editor, {
     theme: "ace/theme/cobalt",
     mode: "ace/mode/python",
   });
@@ -69,6 +97,27 @@
     let code_ = document.getElementById("code");
     let input_ = document.getElementById("code_input");
     let lang = document.getElementById("language");
+    code_.value = code;
+    input_.value = input_text;
+    lang.value = document.getElementById("lang").value;
+    console.log(lang.value);
+  }
+  function compile1() {
+    let code_comp = editor.getElementsByClassName("ace_line")
+    let input_comp = input.getElementsByClassName("ace_line")
+
+    code = ""
+    for(i = 0; i < code_comp.length; i++) {
+      code = code + code_comp[i].innerText + "~";
+    }
+    console.log(code)
+    input_text = ""
+    for(i = 0; i < input_comp.length; i++) {
+      input_text = input_text + input_comp[i].innerText + "~";
+    }
+    let code_ = document.getElementById("code1");
+    let input_ = document.getElementById("code_input1");
+    let lang = document.getElementById("language1");
     code_.value = code;
     input_.value = input_text;
     lang.value = document.getElementById("lang").value;
