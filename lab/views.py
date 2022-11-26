@@ -8,14 +8,23 @@ from django.shortcuts import redirect
 import datetime
 import subprocess, sys
 
-def submit_code(request,pk):
+def submit_code(request,pk,id):
     assignment = Assignment.objects.get(id = pk)
     answers = assignment.answer_set.all()
     answer_count = len(answers)
     current_user = request.user
     current_id = str(assignment.id)
     current_file = "submissions/" + current_id + "_" + str(answer_count + 1)
+    file_name = ""
     final_output = ""
+    if(request.user==assignment.class_in.host):
+        answer = Answer.objects.get(id=id)
+        submission = open("submissions/" + answer.answer, "r")
+        code = ""
+        for i in submission:
+            code += i
+        return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk,"assignment":assignment, "code": code}) 
+        
     for answer in answers:
         if(request.user==answer.student):
             return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk,"assignment":assignment}) 
@@ -39,6 +48,7 @@ def submit_code(request,pk):
         if (language == '50'):
             with open(current_file + ".c", "w") as code_file:
                 code_file.write(code)
+            file_name = str(assignment.id) + "_" + str(answer_count + 1) + ".c"
             try:
                 output = subprocess.check_output(
                 "gcc " + current_file + ".c -o c_code", stderr=subprocess.STDOUT, shell=True, timeout=3,
@@ -57,6 +67,8 @@ def submit_code(request,pk):
         elif (language == '54'):
             with open(current_file + ".cpp", "w") as code_file:
                 code_file.write(code)
+            file_name = str(assignment.id) + "_" + str(answer_count + 1) + ".cpp"
+                
             try:
                 output = subprocess.check_output(
                 "g++ " + current_file + ".cpp -o cpp_code", stderr=subprocess.STDOUT, shell=True, timeout=3,
@@ -76,6 +88,8 @@ def submit_code(request,pk):
             code = code.replace("Main", "J" + current_id + "_" + str(answer_count + 1))
             with open("J" + current_file + ".java", "w") as code_file:
                 code_file.write(code)
+            file_name = "J" + str(assignment.id) + "_" + str(answer_count + 1) + ".java"
+            
             try:
                 output = subprocess.check_output(
                 "javac " + current_file + ".java", stderr=subprocess.STDOUT, shell=True, timeout=3,
@@ -94,6 +108,8 @@ def submit_code(request,pk):
         elif (language == '71'):
             with open(current_file + ".py", "w") as code_file:
                 code_file.write(code)
+            file_name = str(assignment.id) + "_" + str(answer_count + 1) + ".py"
+                
             try:
                 output = subprocess.check_output(
                 "python " + current_file + ".py", stderr=subprocess.STDOUT, shell=True, timeout=3,
@@ -103,19 +119,18 @@ def submit_code(request,pk):
             else:
                 final_output = output
                 
-        answer_details = Answer(assignment = assignment, student = current_user, answer = str(answer_count + 1))
+        answer_details = Answer(assignment = assignment, student = current_user, answer = file_name)
         answer_details.save()
-        print(answer_details)
-        print(final_output)
             
     return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk,"assignment":assignment})
 
 def run_code(request,pk):
     assignment = Assignment.objects.get(id=pk)
     final_output = ""
+    code = ""
+    input_text = ""
     if request.method == "POST":
-        code = ""
-        input_text = ""
+        print(request.POST)
         if len(request.POST["code"]) > 0:
             code = str(request.POST["code"])
             code = "\n".join(code.split("~"))
@@ -192,9 +207,8 @@ def run_code(request,pk):
                 final_output = str(exc.returncode) + " " + exc.output
             else:
                 final_output = output
-        print(final_output)
-            
-    return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk,"assignment":assignment})
+        print(final_output)        
+    return render(request, 'lab/compiler.html', {"final_output":final_output,"pk":pk,"assignment":assignment, "code": code})
 
 @login_required(login_url='/accounts/login')
 def home(request):

@@ -128,7 +128,7 @@
                 <h2 class='heading'>Question: {{ assignment.question }}</h2>
                 <ul class="list-group">
                     {% for answer in answers %}
-                        <li><a href="">        
+                        <li><a href="{% url 'compiler_submit' pk=assignment.id id=answer.id %}">        
                             {{answer.student}}
                             </a>
                         </li>
