@@ -4,7 +4,7 @@
 {% block content %}
 
 <div class='answers'>
-
+    
     <div class='answer_div'>
         {% if assignment.type|lower == "post"|lower %}
             <div class="answer_area">
@@ -121,6 +121,19 @@
                         {% endif %}
                     </div>
                 {% endif %}
+            </div>
+        {% endif %}
+        {% if assignment.type|lower == "assignment"|lower %}
+            <div class="answer_area">
+                <h2 class='heading'>Question: {{ assignment.question }}</h2>
+                <ul class="list-group">
+                    {% for answer in answers %}
+                        <li><a href="">        
+                            {{answer.student}}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
             </div>
         {% endif %}
         <div class='answer_desc'>

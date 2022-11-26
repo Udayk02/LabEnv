@@ -12,13 +12,14 @@ def submit_code(request,pk):
     assignment = Assignment.objects.get(id = pk)
     answers = assignment.answer_set.all()
     answer_count = len(answers)
-    print(answers)
     current_user = request.user
     current_id = str(assignment.id)
     current_file = "submissions/" + current_id + "_" + str(answer_count + 1)
-    print(current_file)
-    
     final_output = ""
+    for answer in answers:
+        if(request.user==answer.student):
+            return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk,"assignment":assignment}) 
+    
     if request.method == "POST":
         print(current_file)
         code = ""
@@ -107,9 +108,10 @@ def submit_code(request,pk):
         print(answer_details)
         print(final_output)
             
-    return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk})
+    return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk,"assignment":assignment})
 
 def run_code(request,pk):
+    assignment = Assignment.objects.get(id=pk)
     final_output = ""
     if request.method == "POST":
         code = ""
@@ -192,7 +194,7 @@ def run_code(request,pk):
                 final_output = output
         print(final_output)
             
-    return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk})
+    return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk,"assignment":assignment})
 
 @login_required(login_url='/accounts/login')
 def home(request):
@@ -273,6 +275,8 @@ def question(request,pk):
         poll = assignment.poll
         voters = poll.voter_set.all()
     if assignment.type == 'assignment':
+        if(request.user==assignment.class_in.host):
+            return render(request,'lab/question.html',{'assignment':assignment,'answers':answers})
         return redirect('compiler_run',pk=pk)
     form = add_answer_form()
     vote_list = []
