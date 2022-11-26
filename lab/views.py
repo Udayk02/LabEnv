@@ -8,6 +8,8 @@ from django.shortcuts import redirect
 import datetime
 import subprocess, sys
 
+time = datetime.datetime.now(datetime.timezone.utc)
+
 def submit_code(request,pk,id):
     assignment = Assignment.objects.get(id = pk)
     answers = assignment.answer_set.all()
@@ -17,13 +19,18 @@ def submit_code(request,pk,id):
     current_file = "submissions/" + current_id + "_" + str(answer_count + 1)
     file_name = ""
     final_output = ""
+    already_answered = answers.filter(student=request.user)
+    
     if(request.user==assignment.class_in.host):
+        if(id == '0'):
+            return redirect('classroom', pk=assignment.class_in.id)
         answer = Answer.objects.get(id=id)
         submission = open("submissions/" + answer.answer, "r")
         code = ""
         for i in submission:
             code += i
-        return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk,"assignment":assignment, "code": code}) 
+        print(code)
+        return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk,"assignment":assignment, "code": code,"already_answered":already_answered}) 
         
     for answer in answers:
         if(request.user==answer.student):
@@ -121,8 +128,17 @@ def submit_code(request,pk,id):
                 
         answer_details = Answer(assignment = assignment, student = current_user, answer = file_name)
         answer_details.save()
+        global time
+        session_time = answer_details.created_on - time
+        answer_details.session_time = session_time
+        time_list = str(answer_details.session_time).split(":")
+        answer_details.session_time = time_list[0] + " Hours " + time_list[1] + " Minutes " + time_list[2].split(".")[0] + " Seconds"
+        answer_details.save()
+        
+        print(session_time)
+
+    return redirect('question',pk=assignment.id)
             
-    return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk,"assignment":assignment})
 
 def run_code(request,pk):
     assignment = Assignment.objects.get(id=pk)
@@ -154,7 +170,7 @@ def run_code(request,pk):
             else:
                 try:
                     output = subprocess.check_output(
-                    "code", stderr=subprocess.STDOUT, shell=True, timeout=3,
+                    "c_code", stderr=subprocess.STDOUT, shell=True, timeout=3,
                     universal_newlines=True, stdin=sys.stdin)
                 except subprocess.CalledProcessError as exc:
                     final_output = str(exc.returncode) + " " + exc.output
@@ -172,7 +188,7 @@ def run_code(request,pk):
             else:
                 try:
                     output = subprocess.check_output(
-                    "code", stderr=subprocess.STDOUT, shell=True, timeout=3,
+                    "cpp_code", stderr=subprocess.STDOUT, shell=True, timeout=3,
                     universal_newlines=True, stdin=sys.stdin)
                 except subprocess.CalledProcessError as exc:
                     final_output = str(exc.returncode) + " " + exc.output
@@ -212,6 +228,7 @@ def run_code(request,pk):
 
 @login_required(login_url='/accounts/login')
 def home(request):
+    print(User.objects.all())
     classes = ClassRoom.objects.filter(host=request.user)
     all_classes = ClassRoom.objects.all()
     classes_you_are_in=[]
@@ -289,14 +306,23 @@ def question(request,pk):
         poll = assignment.poll
         voters = poll.voter_set.all()
     if assignment.type == 'assignment':
+        global time
+        time = datetime.datetime.now(datetime.timezone.utc)
+        print(time)
+        answer = answers.filter(student=request.user)
+        
         if(request.user==assignment.class_in.host):
             return render(request,'lab/question.html',{'assignment':assignment,'answers':answers})
-        return redirect('compiler_run',pk=pk)
+        if(assignment.status == "completed"):
+            return redirect('classroom', pk=assignment.class_in.id)
+        final_output=""
+        code=""
+        return render(request,'lab/compiler.html',{"final_output":final_output,"pk":assignment.id,"assignment":assignment, "code": code})
     form = add_answer_form()
     vote_list = []
     for voter in voters:
         vote_list.append(voter.voter)
-    return render(request, 'lab/question.html',{'assignment':assignment,'form':form,'answers':answers,'poll':poll,"voters":vote_list})
+    return render(request, 'lab/question.html',{'assignment':assignment,'form':form,'answers':answers,'poll':poll,"voters":vote_list,"voters_":voters})
 
 @login_required(login_url='/accounts/login')
 def vote(request, pk):
@@ -376,3 +402,15 @@ def create_poll(request,pk):
             poll.save()
             return redirect('question',pk=pk)
     return render(request, 'lab/create_poll.html',{'form':form,'assignment':assignment_in})
+
+
+def delete_assignment(request,pk):
+    assignment = Assignment.objects.get(id=pk)
+    pk = assignment.class_in.id
+    assignment.delete()
+    return redirect('classroom',pk=pk)
+
+def delete_class(request,pk):
+    classroom = ClassRoom.objects.get(id=pk)
+    classroom.delete()
+    return redirect('home')

@@ -36,11 +36,11 @@
             <button type="submit" class="button" onclick="compile()">Run</button>
           </form>
           <form method="post" class="loginform" action="{% url 'compiler_submit' pk=pk id=0 %}">
-            {% csrf_token %}
-            <input style="display: none;" type="text" name="language1" id="language1">
-            <textarea style="display: none;" name="code1" id="code1" cols="3" rows="1"></textarea>
-            <textarea style="display: none;" name="code_input1" id="code_input1" cols="3" rows="1"></textarea>
-            <button type="submit" class="button" onclick="compile1()">Submit</button>
+              {% csrf_token %}
+              <input style="display: none;" type="text" name="language1" id="language1">
+              <textarea style="display: none;" name="code1" id="code1" cols="3" rows="1"></textarea>
+              <textarea style="display: none;" name="code_input1" id="code_input1" cols="3" rows="1"></textarea>
+              <button type="submit" class="button" onclick="compile1()">Submit</button>
           </form>
         </div>
     </div>

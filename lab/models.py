@@ -35,6 +35,7 @@ class Answer(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     answer = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
+    session_time = models.TextField(default=False, blank=True)
     
     class Meta:
         ordering = ['-created_on']

@@ -26,16 +26,17 @@
                             <h2 class='card-info'>{{classroom.classname}}</h3>
                             <h3 class='card-info'>{{classroom.host}}</h2>
                         </div>
-                        <div class="container" onclick="myFunction(this)">
-                            <div class="bar1"></div>
-                            <div class="bar2"></div>
-                            <div class="bar3"></div>
-                            <div class="dropdown-content">
-                                <a href="#">Edit</a>
-                                <a href="#">Delete</a>
-                                <a href="#">Share</a>
+                        {% if user == classroom.host %}
+                            <div class="container" onclick="myFunction(this)">
+                                <div class="bar1"></div>
+                                <div class="bar2"></div>
+                                <div class="bar3"></div>
+                                <div class="dropdown-content">
+                                    <a href="#">{{classroom.host}}</a>
+                                    <a href="{% url 'delete_class' pk=classroom.id %}">Delete</a>
+                                </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                     <div class='card-tail'>
                         <img src="{% static 'images/people.png' %}" alt="">
@@ -61,16 +62,17 @@
                             <h2 class='card-info'>{{classroom.classname}}</h3>
                             <h3 class='card-info'>{{classroom.host}}</h2>
                         </div>
-                        <div class="container" onclick="myFunction(this)">
-                            <div class="bar1"></div>
-                            <div class="bar2"></div>
-                            <div class="bar3"></div>
-                            <div class="dropdown-content">
-                                <a href="#">Edit</a>
-                                <a href="#">Delete</a>
-                                <a href="#">Share</a>
+                        {% if user == classroom.host %}
+                            <div class="container" onclick="myFunction(this)">
+                                <div class="bar1"></div>
+                                <div class="bar2"></div>
+                                <div class="bar3"></div>
+                                <div class="dropdown-content">
+                                    <a href="#">{{classroom.host}}</a>
+                                    <a href="#">Delete</a>
+                                </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                     <div class='card-tail'>
                         <img src="{% static 'images/people.png' %}" alt="">

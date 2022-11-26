@@ -46,6 +46,9 @@
                             <div style="display: flex;margin:0px;">
                                 <p class="tag"> <span class="status-dot" > {{assignment.status}} </span> {{assignment.status}} </p>
                                 <p class="tag"> <span class="type-dot" >{{assignment.type}}</span>  {{assignment.type}} </p>
+                                {% if user == assignment.class_in.host %}
+                                    <button class='delete'><a href="{% url 'delete_assignment' pk=assignment.id %}">X</a></button>
+                                {% endif %}
                             </div>
                         </div>
                         <p class="question-name">{{assignment.question}} <a href="{% url 'question' pk=assignment.id %}" style="text-decoration: none;"> >> Read more</a></p>

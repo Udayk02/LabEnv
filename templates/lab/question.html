@@ -9,6 +9,7 @@
         {% if assignment.type|lower == "post"|lower %}
             <div class="answer_area">
                 <h2 class='heading'>Question: {{ assignment.question }}</h2>
+                {% if assignment.status|lower == "ongoing"|lower %}
                 <h2 class='heading' style='margin-bottom: 0'>Answer:</h2>
                 <div class='answer_input'>
                     <form method="post" action="{% url 'add_answer' pk=assignment.id %}" class="loginform">
@@ -17,12 +18,13 @@
                         <button type="submit" name="save" class="button" ><span>Post Answer</span></button>
                     </form>
                 </div> 
+                {% endif %}
             </div>
         {% endif %}
         {% if assignment.type|lower == "poll"|lower %}
         <div class="answer_area">
             <h2 class='heading'>Question: {{ poll.question }}</h2>
-                {% if user not in voters %}
+                {% if user not in voters and assignment.status|lower == "ongoing"|lower and user != assignment.class_in.host %}
                     <form method="post" action="{% url 'vote' pk=poll.id %}" class="loginform">
                         {% csrf_token %}
                         {% if poll.option_one %}
@@ -131,11 +133,22 @@
                         <li><a href="{% url 'compiler_submit' pk=assignment.id id=answer.id %}">        
                             {{answer.student}}
                             </a>
+                            <p>{{answer.session_time}}</p>
                         </li>
                     {% endfor %}
                 </ul>
             </div>
         {% endif %}
+        {% if assignment.type|lower == "poll"|lower %}
+        <div class='answer_desc'>
+            <h2 class='heading'>{{voters_.count}} Votes</h2>
+            <div>
+                <h3>Status: {{ assignment.status }}</h3>
+                <h3>Due date: {{ assignment.due_date }}</h3>
+                <h3>Due time: {{ assignment.due_time }}</h3>
+            </div>
+        </div>
+        {% else %}
         <div class='answer_desc'>
             <h2 class='heading'>{{answers.count}} Answers</h2>
             <div>
@@ -144,6 +157,7 @@
                 <h3>Due time: {{ assignment.due_time }}</h3>
             </div>
         </div>
+        {% endif %}
     </div>
     {% if assignment.type|lower == "post"|lower %}
         <div class='answer_given'>

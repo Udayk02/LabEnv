@@ -33,7 +33,8 @@ class create_assignment_form(forms.Form):
 
 
 class ParticipantsForm(forms.Form):
-    choices = [(obj.username, obj.username) for obj in User.objects.all()]
+    objs = User.objects.all()
+    choices = [(obj.username, obj.username) for obj in objs]
     students = forms.MultipleChoiceField(widget=Select2MultipleWidget(attrs={'placeholder': 'Enter Subject Name'}),
                 choices=choices)
 
