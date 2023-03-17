@@ -5,17 +5,19 @@
         <a href="#">
             <button class='participants' onclick="buttonclick();"> 
                 <img src="{% static 'images/people.png' %}" alt="">
-                {{classroom.students.count}} Students
+                {{classroom.students.count}} Participants
             </button>
 
         </a>
         <h1 class='heading' style="font-size: 26px ;border-bottom: 2px solid black;"> {{classroom.subject}} </h1>
         <div id="menu" class="menuOff"> 
             {% if user == classroom.host %}
-            <form method="POST" style="display: flex;align-items: center;" class="loginform" action="{% url 'add_participants' pk=classroom.id %}">
-                {% csrf_token %}
-                {{ form.students }}
-                    <button type="submit" style="margin: 0;padding: 0;" class="participants_button"><img src="{% static 'images/plus.png' %}" alt=""></button>
+            <form method="POST" style="display: flex;align-items: center; " class="loginform" action="{% url 'add_participants' pk=classroom.id %}">
+                {% csrf_token %}   
+                {{ form.students }}    
+                <button type="submit" style="margin: 0;padding: 5px; cursor: pointer;" class="participants_button">
+                    <img src="{% static 'images/plus.png' %}" alt="">
+                </button>
             </form>
             {% endif %}
             <div class="students_list">
@@ -79,7 +81,6 @@
         var menuList = document.getElementById("menu");    
         if (menuList.className == "menuOff")    
         {    
-        
             menuList.className = "menuOn";    
         } else    
         {    

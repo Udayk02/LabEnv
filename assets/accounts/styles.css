@@ -117,6 +117,7 @@ a{
     height: 40px;
     background-color: #534292;
     color:white;
+    cursor: pointer;
 }
 
 .loginform > select{
@@ -153,6 +154,7 @@ a{
     height: 40px;
     background-color: #534292;
     color:white;
+    cursor: pointer;
 }
 
 .home {
@@ -445,14 +447,14 @@ a{
     margin-right: 10px;
 }
 
-#menu    
+#menu   
 {   
     height: 77%; 
     width: 200px;
     position: absolute; 
     z-index: 1; 
     top: 135;
-    border-top-right-radius: 10px;
+    border-radius: 10px;
     border-bottom-right-radius: 10px;
     left: 0;
     color: white;
@@ -461,6 +463,7 @@ a{
     overflow-x: hidden; 
     padding-top: 10px; 
     transition: 0.5s;
+    margin-left: 5px;
 }  
 .menuOff     
 {    
@@ -700,7 +703,9 @@ a{
     margin-left: 80px;
     justify-content:space-between;
 }
-
+ button{
+    cursor: pointer;
+}
 .heading-lab{
     color: #534292;
     font-size: x-large;

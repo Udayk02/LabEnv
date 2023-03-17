@@ -10,7 +10,7 @@ class ClassRoom(models.Model):
     students = models.ManyToManyField(User,related_name="participants",blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-
+    
     class Meta:
         ordering = ['-updated', '-created']
 

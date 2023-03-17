@@ -31,9 +31,18 @@ class create_assignment_form(forms.Form):
     due_date = forms.DateField(widget=AdminDateWidget(attrs={'type': 'date'}))
     due_time = forms.TimeField(widget=AdminTimeWidget(attrs={'type': 'time'}))
 
-
+#adding participants into class room
 class ParticipantsForm(forms.Form):
-    choices = [(obj.username, obj.username) for obj in User.objects.all()]
+    lst = []
+    choices = []
+    def ParticipantsForm(self,pk):
+        for student in ClassRoom.objects.get(id=pk).students:
+            self.lst.append(student)
+    for obj in User.objects.all():
+        if obj not in lst:
+            choices.append((obj.username, obj.username))
+    
+    # choices = [(obj.username, obj.username) for obj in User.objects.all()]
     students = forms.MultipleChoiceField(widget=Select2MultipleWidget(attrs={'placeholder': 'Enter Subject Name'}),
                 choices=choices)
 
