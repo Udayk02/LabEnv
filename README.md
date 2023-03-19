@@ -14,7 +14,7 @@ Linux:
 
 Python requirements:
 
-> pip install django django-allauth django-select2 pyrebase
+> pip install django django-allauth django-select2 pyrebase4
 
 or 
 
