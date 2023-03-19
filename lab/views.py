@@ -7,7 +7,7 @@ from .models import ClassRoom,Assignment,Answer,Poll,Voter
 from django.shortcuts import redirect
 import datetime
 import subprocess, sys
-import pyrebase
+import pyrebase, shutil
 
 config = {
 "apiKey": "AIzaSyBLRcq902ZtRsZWkcFq1nA83kSKOOjPfuk",
@@ -45,7 +45,17 @@ def submit_code(request,pk,id):
     final_output = ""
     if(request.user==assignment.class_in.host):
         answer = Answer.objects.get(id=id)
-        submission = open("submissions/" + answer.answer, "r")
+
+        all_files = storage.list_files()
+        for file in all_files:
+            if file.name == answer.answer:
+                print(file.name)
+                file.download_to_filename(file.name)
+                shutil.move(answer.answer,'submissions/'+answer.answer)
+        # storage.child(answer.answer).download(answer.answer)
+        
+        submission = open("submissions/" +answer.answer, "r")
+
         code = ""
         for i in submission:
             code += i

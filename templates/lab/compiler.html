@@ -3,6 +3,7 @@
 
 {% block content %}
 <div>
+    <!-- Assignment is in models.py -->
     <h2 class="heading-lab">Question : {{assignment.question}}</h2>
     <div style="display: flex;width: auto;">
       <div style="display: flex;flex-direction:column;width: 100%;">
@@ -19,6 +20,7 @@
         </div>
         <div id="editor" aria-placeholder="Code Here...">{{code}}</div>
       </div>
+
       <div style="width: 80%;" style="display:flex;">
         <div>
           <h2 style=" margin-left: 80px; font-family: 'Ubuntu', sans-serif;">Inputs</h2>
