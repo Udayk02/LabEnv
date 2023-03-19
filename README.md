@@ -5,8 +5,10 @@ Create virtual environment:
 > python -m venv env
 
 Activate virtual env:
+
 Windows: 
 > .\env\Scripts\activate
+
 Linux:
 > source env/bin/activate
 
