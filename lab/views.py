@@ -7,8 +7,32 @@ from .models import ClassRoom,Assignment,Answer,Poll,Voter
 from django.shortcuts import redirect
 import datetime
 import subprocess, sys
+import pyrebase, shutil
 
 time = datetime.datetime.now(datetime.timezone.utc)
+
+config = {
+"apiKey": "AIzaSyBLRcq902ZtRsZWkcFq1nA83kSKOOjPfuk",
+"authDomain": "project1-b6dce.firebaseapp.com",
+"databaseURL": "https://project1-b6dce.firebaseio.com",
+"projectId": "project1-b6dce",
+"storageBucket": "project1-b6dce.appspot.com",
+"serviceAccount": {
+  "type": "service_account",
+  "project_id": "project1-b6dce",
+  "private_key_id": "3d4df670b6e9991e8463e53602e4197d3b686292",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCx2tqUE14DgiNR\nddz8cXZCozM9JkOUcUp5gZo8EE2rLPA4b5Am8Y652bcN/zF4MM00wC4daFpBWKd4\nHdYIFYSe9zZmWWIjD/ai84OaXQHCuKkR6bABzYy+Sp/8gEsfgCQtx5UdVNs/APJ6\nJBI0pYqqA/pryEAi0PzDX1R2tqPb0Cp5vECK7SNCydKGFMnQI6HIVyNXMGTlravQ\n8+837xhL2Gn+4gmfrdYiZIFIynm2az1wAwvg1Di2Yr1QQcbw+ooVlpxMMb9h7zky\nMcg+c6oobBLg/0Pv68VWP8SZrOBG6uEnBNDgaOCGtzxfOu1U3FzqWj9JaUbala8w\nSVkQHAFxAgMBAAECggEABNPCknnLF6/Iyx12k8B1m/3ndl2rQGRpx835dG9h2EdG\nNtXqVPBB9i/fTMk0G8XBUBD2P3SVXIguNW+j30DMQm9FwfXjmL2GbWpMFFy5X0JZ\nTmPoE8hzLTgDyxvlThPRh4+O78adk8JwEloXx2eF0bL9cT70ZK2E6r2T4ov2+xCJ\n+WjrZ+DMzM1LB00vS/UOtbmfdJKqPVK/BVJhHmpiVeoy4HGUCAh2j8QcHKDMDTUG\nVRL9Kt03R5zdt6Z+LogFM2ws970t6oOpSd6i+07DZ21ML8oeLbBTDkjjEVdpgEOr\nrhF7ORIMBLhxu0pupDc1DvVDsXeVl5cVpuFrtu0bcQKBgQDgsFyeXirjnwgKka1F\nnWjpJA/sz5xULqEdVkvseSKeOfQ1K45pa9y0gK4zHT+Jakpzn8neEIbmA8JQxHb5\ndzsEldkvxmU6lBdNSv7+5xs9JB51DMydowiNjBi6p3lL+3KvDBmXm+fxHLE8Dtn6\n5tp39AoJLafJZa8C7wcZ/Q3uiQKBgQDKo7eq+7Af9lq4yxqvLJkFBfPttpZb6mUg\nZ9ElEGbVDpy+UmExp6NsOM4IsZ5XmKWxqAXogDDOUJhjjHIQNzEBiAh+og7qh0+V\nnitJuhy0OwAQBJViXICrKbBAyIDQ0wTHY5yjAZ0F5jueaeayE1vXe1J00yTAUaah\nCLklzWMBqQKBgGd8s1v50VU/hSuhByZ+Jrji9DbFNKKNS4XAnn2PGYO4+6KVqiUi\nGehFMHa4bPA0tY/ls8uE3y0H5DLhGk8yPEuTXRIlFbDSTp06ApKTDTeu8BxHReMB\nGUpgkW8+/Z4idSLstsjedQjXh0Y7LOjj9RG0o/6wOYyIOgBm6WVt6UHJAoGAWi8Y\nu9j93ou2fo2t145in7Cxifb73fZogU6S7wroqSOysKVbKk0wVybE02uxS8zc2T8t\nOfdrQTbvS0ajMQJPJh5ToYAgYVJNIgpdu5c/1Rp5Aaf4j+kZPpP0JDDX25g+hTqY\n6Jb8OjboC62YBWLGOhVhcirSLWFpZjvKor9Qs9kCgYEAu9BUAWKMD01EgCzgx/IR\nc8B9Jv2NwdseKRotiuWuL1/TLU1yns0D9vIxXJG3Ya4tv1e/2Uoa4t1DH/eRqe+o\nHhmUQ2OiLXzRmZCZSEaGOLRg50gYEC2O5VoPSbXmaCYS4+8KU0yJ83vIDVEk0/Ji\nsvGGzo22/zx4EVAV5yUQhGo=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-dsoll@project1-b6dce.iam.gserviceaccount.com",
+  "client_id": "100367057146429045553",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-dsoll%40project1-b6dce.iam.gserviceaccount.com"
+}
+}
+
+firebase_storage = pyrebase.initialize_app(config)
+storage = firebase_storage.storage()
 
 def submit_code(request,pk,id):
     assignment = Assignment.objects.get(id = pk)
@@ -25,11 +49,19 @@ def submit_code(request,pk,id):
         if(id == '0'):
             return redirect('classroom', pk=assignment.class_in.id)
         answer = Answer.objects.get(id=id)
+
+        all_files = storage.list_files()
+        for file in all_files:
+            if file.name == answer.answer:
+                print(file.name)
+                file.download_to_filename(file.name)
+                shutil.move(answer.answer,'submissions/'+answer.answer)
+
         submission = open("submissions/" + answer.answer, "r")
         code = ""
         for i in submission:
             code += i
-        print(code)
+
         return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk,"assignment":assignment, "code": code,"already_answered":already_answered}) 
         
     for answer in answers:
@@ -134,6 +166,8 @@ def submit_code(request,pk,id):
         time_list = str(answer_details.session_time).split(":")
         answer_details.session_time = time_list[0] + " Hours " + time_list[1] + " Minutes " + time_list[2].split(".")[0] + " Seconds"
         answer_details.save()
+        
+        storage.child(file_name).put("submissions\\" + file_name)
         
         print(session_time)
 
