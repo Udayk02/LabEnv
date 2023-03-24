@@ -37,10 +37,10 @@ storage = firebase_storage.storage()
 def submit_code(request,pk,id):
     assignment = Assignment.objects.get(id = pk)
     answers = assignment.answer_set.all()
-    answer_count = len(answers)
     current_user = request.user
+    can_edit_marks = True if current_user == assignment.class_in.host else False
     current_id = str(assignment.id)
-    current_file = "submissions/" + current_id + "_" + str(answer_count + 1)
+    current_file = "submissions/" + current_id + "_" + current_user.username
     file_name = ""
     final_output = ""
     already_answered = answers.filter(student=request.user)
@@ -62,10 +62,10 @@ def submit_code(request,pk,id):
         for i in submission:
             code += i
 
-        return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk,"assignment":assignment, "code": code,"already_answered":already_answered}) 
-        
+        return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk,"assignment":assignment, "code": code,"already_answered":already_answered, "id":id, "can_edit_marks":can_edit_marks}) 
+
     for answer in answers:
-        if(request.user==answer.student):
+        if(request.user == answer.student):
             return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk,"assignment":assignment}) 
     
     if request.method == "POST":
@@ -87,7 +87,7 @@ def submit_code(request,pk,id):
         if (language == '50'):
             with open(current_file + ".c", "w") as code_file:
                 code_file.write(code)
-            file_name = str(assignment.id) + "_" + str(answer_count + 1) + ".c"
+            file_name = str(assignment.id) + "_" + current_user.username + ".c"
             try:
                 output = subprocess.check_output(
                 "gcc " + current_file + ".c -o c_code", stderr=subprocess.STDOUT, shell=True, timeout=3,
@@ -106,7 +106,7 @@ def submit_code(request,pk,id):
         elif (language == '54'):
             with open(current_file + ".cpp", "w") as code_file:
                 code_file.write(code)
-            file_name = str(assignment.id) + "_" + str(answer_count + 1) + ".cpp"
+            file_name = str(assignment.id) + "_" + current_user.username + ".cpp"
                 
             try:
                 output = subprocess.check_output(
@@ -124,10 +124,10 @@ def submit_code(request,pk,id):
                 else:
                     final_output = output
         elif (language == '62'):
-            code = code.replace("Main", "J" + current_id + "_" + str(answer_count + 1))
+            code = code.replace("Main", "J" + current_id + "_" + current_user.username)
             with open("J" + current_file + ".java", "w") as code_file:
                 code_file.write(code)
-            file_name = "J" + str(assignment.id) + "_" + str(answer_count + 1) + ".java"
+            file_name = "J" + str(assignment.id) + "_" + current_user.username + ".java"
             
             try:
                 output = subprocess.check_output(
@@ -147,7 +147,7 @@ def submit_code(request,pk,id):
         elif (language == '71'):
             with open(current_file + ".py", "w") as code_file:
                 code_file.write(code)
-            file_name = str(assignment.id) + "_" + str(answer_count + 1) + ".py"
+            file_name = str(assignment.id) + "_" + current_user.username + ".py"
                 
             try:
                 output = subprocess.check_output(
@@ -168,14 +168,29 @@ def submit_code(request,pk,id):
         answer_details.save()
         
         storage.child(file_name).put("submissions\\" + file_name)
-        
         print(session_time)
-
     return redirect('question',pk=assignment.id)
-            
+
+
+def assign_marks(request,pk,id):
+    assignment = Assignment.objects.get(id=pk)
+    current_user = request.user
+    if current_user == assignment.class_in.host:
+        if(id == '0'):
+            return redirect('classroom', pk=assignment.class_in.id)
+        answer = Answer.objects.get(id=id)
+        if request.method == "POST" and 'marks' in request.POST:
+            if(len(request.POST['marks'])) > 0:
+                marks = str(request.POST['marks'])
+                answer.marks = marks
+            answer.save()
+    return redirect('question',pk=assignment.id)
+
 
 def run_code(request,pk):
     assignment = Assignment.objects.get(id=pk)
+    answers = assignment.answer_set.all()
+    current_user = request.user
     final_output = ""
     code = ""
     input_text = ""
@@ -260,6 +275,7 @@ def run_code(request,pk):
         print(final_output)        
     return render(request, 'lab/compiler.html', {"final_output":final_output,"pk":pk,"assignment":assignment, "code": code})
 
+
 @login_required(login_url='/accounts/login')
 def home(request):
     print(User.objects.all())
@@ -334,24 +350,40 @@ def create_assignment(request,pk):
 def question(request,pk):
     assignment = Assignment.objects.get(id=pk)
     answers = assignment.answer_set.all()
+    can_edit_marks = True if request.user == assignment.class_in.host else False
     poll=None
     voters=[]
+    code = ""
+    marks = 0
     if assignment.type == 'poll':
         poll = assignment.poll
         voters = poll.voter_set.all()
     if assignment.type == 'assignment':
         global time
+
         time = datetime.datetime.now(datetime.timezone.utc)
         print(time)
         answer = answers.filter(student=request.user)
-        
+        for answer in answers:
+            if(request.user == answer.student) and ((pk + "_" + request.user.username) in  answer.answer):
+                all_files = storage.list_files()
+                for file in all_files:
+                    if file.name == answer.answer:
+                        print(file.name)
+                        file.download_to_filename(file.name)
+                        shutil.move(answer.answer,'submissions/'+answer.answer)
+
+                submission = open("submissions/" + answer.answer, "r")
+                for i in submission:
+                    code += i
+            if answer.student == request.user:
+                marks = answer.marks
         if(request.user==assignment.class_in.host):
             return render(request,'lab/question.html',{'assignment':assignment,'answers':answers})
         if(assignment.status == "completed"):
             return redirect('classroom', pk=assignment.class_in.id)
         final_output=""
-        code=""
-        return render(request,'lab/compiler.html',{"final_output":final_output,"pk":assignment.id,"assignment":assignment, "code": code})
+        return render(request,'lab/compiler.html',{"final_output":final_output,"pk":assignment.id,"assignment":assignment, "code": code, "id":0,"can_edit_marks":can_edit_marks, "marks":marks})
     form = add_answer_form()
     vote_list = []
     for voter in voters:

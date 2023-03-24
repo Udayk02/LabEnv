@@ -36,7 +36,8 @@ class Answer(models.Model):
     answer = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
     session_time = models.TextField(default=False, blank=True)
-    
+    marks = models.TextField(blank=True,default=0)
+
     class Meta:
         ordering = ['-created_on']
 
