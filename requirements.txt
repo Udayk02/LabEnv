@@ -1,0 +1,4 @@
+Django==4.1.7
+django-allauth==0.53.0
+django-select2==8.1.1
+Pyrebase4==4.6.0
