@@ -66,7 +66,7 @@ def submit_code(request,pk,id):
 
     for answer in answers:
         if(request.user == answer.student):
-            return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk,"assignment":assignment}) 
+            return render(request, 'lab/compiler.html',{"final_output":final_output,"pk":pk,"assignment":assignment,"id":id}) 
     
     if request.method == "POST":
         print(current_file)
@@ -273,7 +273,7 @@ def run_code(request,pk):
             else:
                 final_output = output
         print(final_output)        
-    return render(request, 'lab/compiler.html', {"final_output":final_output,"pk":pk,"assignment":assignment, "code": code})
+    return render(request, 'lab/compiler.html', {"final_output":final_output,"pk":pk,"assignment":assignment, "code": code, "id":0})
 
 
 @login_required(login_url='/accounts/login')
@@ -473,10 +473,12 @@ def create_poll(request,pk):
 def delete_assignment(request,pk):
     assignment = Assignment.objects.get(id=pk)
     pk = assignment.class_in.id
+
     assignment.delete()
     return redirect('classroom',pk=pk)
 
 def delete_class(request,pk):
     classroom = ClassRoom.objects.get(id=pk)
-    classroom.delete()
+    if request.user == classroom.host:
+        classroom.delete()
     return redirect('home')
