@@ -3,7 +3,22 @@
 
 {% block content %}
 <div>
-    <h2 class="heading-lab">Question : {{assignment.question}}</h2>
+    <h2 class="heading-lab">Question : {{assignment.question}}
+      <form method="post" action="{% url 'assign_marks' pk=pk id=id %}" style="display: inline; align-self: center;">
+        {% csrf_token %}
+        <span style="display: flex; float: right;">
+          <label>Marks: &nbsp;</label> 
+          {% if can_edit_marks %}
+            <input id="marks" name="marks" type="text" 
+                style="width: 2.2em; height: 2em; border: 1px solid gray; border-radius: 5px; margin-right: 5px; margin-left:5px;" value="{{marks}}">
+                <button id="marksbtn" onclick="assignMarks()" style="width:5em; height:2em; background-color: green;  border-radius: 5px; cursor: pointer; color: white;">Assign</button>
+          {% else %}
+            <div>{{marks}}</div>
+          {% endif %}
+
+      </span>
+      </form> 
+    </h2> 
     <div style="display: flex;width: auto;">
       <div style="display: flex;flex-direction:column;width: 100%;">
         <div style="display: flex; align-items:center; justify-content:space-between; ">
@@ -51,9 +66,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.5.3/ace.js"></script>
 
 <script>
+  let marks_editor = document.querySelector("marks")
+  
+
   let editor = document.querySelector("#editor");
   let input = document.querySelector("#input");
-
+  
   ace.edit(input, {
     theme: "ace/theme/cobalt",
     mode: "ace/mode/text",
@@ -77,7 +95,9 @@
       });
     } 
   }
-
+  function assignMarks(){
+    let marks = document.getElementById("editor").value;
+  }
   function compile(e) {
     let code_comp = editor.getElementsByClassName("ace_line")
     let input_comp = input.getElementsByClassName("ace_line")
@@ -120,8 +140,6 @@
     lang.value = document.getElementById("lang").value;
     console.log(lang.value);
   }
-  function keep_code(code, input, output) {
 
-  }
 </script>
 {% endblock %}
