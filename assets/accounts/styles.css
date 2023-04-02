@@ -651,9 +651,8 @@ a{
     display: flex;
     height: 500px;
     width: 100%;
-    background-color:rgb(246, 237, 237);
+    background-color: #272822;
     font-size: 20px;
-    color: black;
     margin-left: 30px;
     border: 1px solid black;
 }
@@ -666,7 +665,7 @@ a{
     margin-left: 80px;
     margin-top: 156px;
     float: right;
-    background-color: rgb(246, 237, 237);
+    background-color: white;
     width: 80%;
     height: 200px;
     margin-bottom: 84px;
@@ -681,10 +680,9 @@ a{
     align-items: center;
 }
 #input{
-    color: black;
     width: 80%;
     height: 25%;
-    background-color: rgb(246, 237, 237);
+    background-color: #272822;
     font-size: 20px;
     border: 1px solid black;
     margin-left: 80px;

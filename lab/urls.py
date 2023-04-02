@@ -13,7 +13,7 @@ urlpatterns = [
     path('create_poll/<str:pk>', views.create_poll, name='create_poll'),
     path('compiler_submit/<str:pk>/(?P<id>\d+)/$', views.submit_code, name='compiler_submit'),
     path('assign_marks/<str:pk>/(?P<id>\d+)/$',views.assign_marks,name='assign_marks'),
-    path('compiler_run/<str:pk>', views.run_code, name='compiler_run'),
+    path('compiler_run/<str:pk>/<str:id>', views.run_code, name='compiler_run'),
     path('delete_assignment/<str:pk>', views.delete_assignment, name='delete_assignment'),
     path('delete_class/<str:pk>', views.delete_class, name='delete_class'),
 ]

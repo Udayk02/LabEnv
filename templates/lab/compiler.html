@@ -43,7 +43,7 @@
           <textarea name="output" id="output" cols="30" rows="10" placeholder="Output">{{final_output}}</textarea>
         </div>
         <div class="button-forms">
-          <form method="post" class="loginform" action="{% url 'compiler_run' pk=pk %}">
+          <form method="post" class="loginform" action="{% url 'compiler_run' pk=pk id=id %}">
             {% csrf_token %}
             <input style="display: none;" type="text" name="language" id="language">
             <textarea style="display: none;" name="code" id="code" cols="3" rows="1"></textarea>
@@ -73,11 +73,11 @@
   let input = document.querySelector("#input");
   
   ace.edit(input, {
-    theme: "ace/theme/cobalt",
+    theme: "ace/theme/monokai",
     mode: "ace/mode/text",
   });
   ace.edit(editor, {
-    theme: "ace/theme/cobalt",
+    theme: "ace/theme/monokai",
     mode: "ace/mode/python",
   });
   function set_lang() {
@@ -85,12 +85,12 @@
     console.log(lang)
     if (lang == 71) {
       ace.edit(editor, {
-        theme: "ace/theme/cobalt",
+        theme: "ace/theme/monokai",
         mode: "ace/mode/python",
       });
     } else if (lang == 62 || lang == 50 || lang == 54) {
       ace.edit(editor, {
-        theme: "ace/theme/cobalt",
+        theme: "ace/theme/monokai",
         mode: "ace/mode/java",
       });
     } 
