@@ -19,3 +19,8 @@ Python requirements:
 or 
 
 > pip install -r requirements.txt
+
+To run the application:
+
+> (from the root folder)
+> python | python3 manage.py runserver
