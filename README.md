@@ -22,5 +22,7 @@ or
 
 To run the application:
 
-> (from the root folder)
+> (from the root folder) \n
 > python | python3 manage.py runserver
+
+Go to localhost port mentioned to view the web application.
