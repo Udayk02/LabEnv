@@ -27,3 +27,5 @@ To run the application:
 > python | python3 manage.py runserver
 
 Go to localhost port mentioned to view the web application.
+
+Note: You need to give your own FireBase details in views.py
