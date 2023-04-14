@@ -183,6 +183,8 @@ def run_code(request,pk):
     final_output = ""
     code = ""
     input_text = ""
+    can_edit_marks = True if current_user == assignment.class_in.host else False
+    already_answered = answers.filter(student=request.user)
     if request.method == "POST":
         print(request.POST)
         if len(request.POST["code"]) > 0:
